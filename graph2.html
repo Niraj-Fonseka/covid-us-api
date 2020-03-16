@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    
+  <script>
+  $(function () {
+      $('#container').highcharts({
+		chart: {
+			zoomType: 'xy'
+		},
+		title: {
+			text: 'Average Monthly Weather Data for Tokyo',
+			align: 'left'
+		},
+		subtitle: {
+			text: 'Source: WorldClimate.com',
+			align: 'left'
+		},
+		xAxis: [{
+			categories: ['AK','AL','AR','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'],
+			crosshair: true
+		}],
+		yAxis: [{ // Primary yAxis
+			labels: {
+				format: '{value}',
+				style: {
+					color: Highcharts.getOptions().colors[2]
+				}
+			},
+			title: {
+				text: 'Temperature',
+				style: {
+					color: Highcharts.getOptions().colors[2]
+				}
+			},
+			opposite: true
+	
+		}, { // Secondary yAxis
+			gridLineWidth: 0,
+			title: {
+				text: 'Rainfall',
+				style: {
+					color: Highcharts.getOptions().colors[0]
+				}
+			},
+			labels: {
+				format: '{value}',
+				style: {
+					color: Highcharts.getOptions().colors[0]
+				}
+			}
+	
+		}],
+		tooltip: {
+			shared: true
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'left',
+			x: 80,
+			verticalAlign: 'top',
+			y: 55,
+			floating: true,
+			backgroundColor:
+				Highcharts.defaultOptions.legend.backgroundColor || // theme
+				'rgba(255,255,255,0.25)'
+		},
+		series: [{
+			name: 'Rainfall',
+			type: 'column',
+			yAxis: 1,
+			data: [0,0,0,0,5,1,0,0,0,4,1,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,3,0,0,0,0,0,0,0,0,0,0,1,0,40,0,0,0],
+			tooltip: {
+				valueSuffix: 'deaths'
+			}
+	
+		},
+		{
+			name: 'Temperature',
+			type: 'spline',
+			data: [1,12,16,12,293,131,20,16,6,116,99,2,18,5,64,19,8,16,91,138,31,3,33,35,5,10,7,32,1,17,13,98,13,21,729,36,9,36,63,20,19,9,39,56,28,45,4,642,33,0,3],
+			tooltip: {
+				valueSuffix: ' °C'
+			}
+		}],
+		responsive: {
+			rules: [{
+				condition: {
+					maxWidth: 500
+				},
+				chartOptions: {
+					legend: {
+						floating: false,
+						layout: 'horizontal',
+						align: 'center',
+						verticalAlign: 'bottom',
+						x: 0,
+						y: 0
+					},
+					yAxis: [{
+						labels: {
+							align: 'right',
+							x: 0,
+							y: -6
+						},
+						showLastLabel: false
+					}, {
+						labels: {
+							align: 'left',
+							x: 0,
+							y: -6
+						},
+						showLastLabel: false
+					}, {
+						visible: false
+					}]
+				}
+			}]
+		}
+	});	
+  });
+  </script>
+</body>
+	
