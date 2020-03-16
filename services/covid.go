@@ -3,7 +3,6 @@ package services
 import (
 	"covid-us-api/requests"
 	"encoding/json"
-	"fmt"
 )
 
 type Daily struct {
@@ -34,8 +33,6 @@ func (c *Covid) GetDailyCasesUS() ([]Daily, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(dailyValues)
 
 	return dailyValues, nil
 }

@@ -27,10 +27,6 @@ func (s *S3Manager) UploadFile(bucket string, filename string) {
 		Credentials: credentials.NewStaticCredentials(os.Getenv("aws_access_key_id"), os.Getenv("aws_secret_access_key"), ""),
 	})
 
-	// Setup the S3 Upload Manager. Also see the SDK doc for the Upload Manager
-	// for more information on configuring part size, and concurrency.
-	//
-	// http://docs.aws.amazon.com/sdk-for-go/api/service/s3/s3manager/#NewUploader
 	uploader := s3manager.NewUploader(sess)
 
 	_, err = uploader.Upload(&s3manager.UploadInput{
@@ -38,6 +34,7 @@ func (s *S3Manager) UploadFile(bucket string, filename string) {
 		Key:         aws.String(filename),
 		ContentType: aws.String("text/html"),
 		Body:        file,
+		ACL:         aws.String("public-read"),
 	})
 	if err != nil {
 		// Print the error and exit.
