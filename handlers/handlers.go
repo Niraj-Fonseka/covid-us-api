@@ -26,5 +26,5 @@ func (h *Handlers) DrawGraph(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	h.Services.Graph.DrawGraphTwo(response)
+	h.Services.Graph.DrawDeathsGraph(response)
 }
