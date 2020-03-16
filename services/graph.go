@@ -16,6 +16,8 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 	//date, _ := strconv.Atoi(time.Now().Format("20060102"))
 	date := data[0].Date
 
+	dateString := strconv.Itoa(date)
+	dateTitle := fmt.Sprintf("%s-%s-%s", dateString[:4], dateString[4:6], dateString[6:])
 	var states string
 	var y1 string
 	var y2 string
@@ -55,10 +57,21 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
 		</head>
+		<style>
+			#date-title{
+				text-align: center;
+			}
+		</style>
 		<body>
+		<div id="date-title">
+			<h1>%s</h1>
+		</div>
 		<div id="container-death" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
 		<div id="container-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
 		<div id="container-pending" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
 		<div id="container-total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 			`
 
@@ -73,6 +86,9 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					type: 'column'
 				},
 				xAxis: {
+					title:{
+						text: 'Deaths'
+					},
 					categories: %s
 				},
 			
@@ -83,21 +99,25 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 				},
 			
 				series: [{
+					name: "deaths",
 					data: %s
 				}]
 			});
 			
 			$('#container-positive').highcharts( {
 				title:{
-					text : 'Positive'
+					text : 'Positive Cases'
 				},
 					chart: {
 						type: 'column'
 					},
 					xAxis: {
+						title:{
+							text: 'Positive Cases'
+						},
 						categories: %s
 					},
-				
+
 					plotOptions: {
 						series: {
 							fillOpacity: 0.1
@@ -105,19 +125,24 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					},
 				
 					series: [{
+						name: "positive",
 						data: %s
 					}]
 				});
 			$('#container-pending').highcharts( {
 				title:{
-					text : 'Pending'
+					text : 'Pending Results'
 				},
 					chart: {
 						type: 'column'
 					},
 					xAxis: {
+						title:{
+							text: 'Pending Results'
+						},
 						categories: %s
 					},
+					
 				
 					plotOptions: {
 						series: {
@@ -126,17 +151,21 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					},
 				
 					series: [{
+						name: "pending",
 						data: %s
 					}]
 				});		
 				$('#container-total').highcharts( {
 					title:{
-						text : 'Total'
+						text : 'Total Cases'
 					},
 					chart: {
 						type: 'column'
 					},
 					xAxis: {
+						title:{
+							text: 'Total Cases'
+						},
 						categories: %s
 					},
 				
@@ -147,6 +176,7 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					},
 				
 					series: [{
+						name: "total",
 						data: %s
 					}]
 				});			
@@ -154,7 +184,7 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		</script>
 		</body>
 	`
-	bt := []byte(fmt.Sprintf(header+str, states, y1, states, y2, states, y3, states, y4))
+	bt := []byte(fmt.Sprintf(header+str, dateTitle, states, y1, states, y2, states, y3, states, y4))
 
 	err := ioutil.WriteFile("covid.html", bt, 0644)
 
