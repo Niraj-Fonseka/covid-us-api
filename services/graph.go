@@ -192,8 +192,8 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		log.Fatal(err)
 	}
 
-	var s3Manageer S3Manager
+	// var s3Manageer S3Manager
 
-	s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
+	// s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
 
 }
