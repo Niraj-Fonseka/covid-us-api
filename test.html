@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+		<head>
+		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+		<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+		</head>
+
+		<body style="background-color:#2A2D34;">
+
+		<div id="container-death" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+		<hr>
+		<div id="container-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
+		<div id="container-pending" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
+		<div id="container-total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+		<script>
+
+		
+		$(function () {
+			$('#container-death').highcharts('Map',{
+
+				chart: {
+					map: 'countries/us/us-all',
+					borderWidth: 1
+				},
+		
+				title: {
+					text: 'US population density (/km²)'
+				},
+		
+				exporting: {
+					sourceWidth: 600,
+					sourceHeight: 500
+				},
+		
+				legend: {
+					layout: 'horizontal',
+					borderWidth: 0,
+					backgroundColor: 'rgba(255,255,255,0.85)',
+					floating: true,
+					verticalAlign: 'top',
+					y: 25
+				},
+		
+				mapNavigation: {
+					enabled: true
+				},
+		
+				colorAxis: {
+					min: 1,
+					type: 'logarithmic',
+					minColor: '#EEEEFF',
+					maxColor: '#000022',
+					stops: [
+						[0, '#EFEFFF'],
+						[0.67, '#4444FF'],
+						[1, '#000022']
+					]
+				},
+		
+				series: [{
+					animation: {
+						duration: 1000
+					},
+					data: [{"value":0.00001,"code":"AK"},{"value":0.00001,"code":"AL"},{"value":0.00001,"code":"AR"},{"value":0.00001,"code":"AZ"},{"value":13,"code":"CA"},{"value":2,"code":"CO"},{"value":0.00001,"code":"CT"},{"value":0.00001,"code":"DC"},{"value":0.00001,"code":"DE"},{"value":7,"code":"FL"},{"value":1,"code":"GA"},{"value":0.00001,"code":"HI"},{"value":0.00001,"code":"IA"},{"value":0.00001,"code":"ID"},{"value":1,"code":"IL"},{"value":2,"code":"IN"},{"value":1,"code":"KS"},{"value":1,"code":"KY"},{"value":6,"code":"LA"},{"value":0.00001,"code":"MA"},{"value":0.00001,"code":"MD"},{"value":0.00001,"code":"ME"},{"value":0.00001,"code":"MI"},{"value":0.00001,"code":"MN"},{"value":0.00001,"code":"MO"},{"value":0.00001,"code":"MS"},{"value":0.00001,"code":"MT"},{"value":0.00001,"code":"NC"},{"value":0.00001,"code":"ND"},{"value":0.00001,"code":"NE"},{"value":0.00001,"code":"NH"},{"value":5,"code":"NJ"},{"value":0.00001,"code":"NM"},{"value":1,"code":"NV"},{"value":12,"code":"NY"},{"value":0.00001,"code":"OH"},{"value":0.00001,"code":"OK"},{"value":3,"code":"OR"},{"value":0.00001,"code":"PA"},{"value":0.00001,"code":"RI"},{"value":1,"code":"SC"},{"value":1,"code":"SD"},{"value":0.00001,"code":"TN"},{"value":2,"code":"TX"},{"value":0.00001,"code":"UT"},{"value":1,"code":"VA"},{"value":0.00001,"code":"VT"},{"value":52,"code":"WA"},{"value":0.00001,"code":"WI"},{"value":0.00001,"code":"WV"},{"value":0.00001,"code":"WY"},{"value":0.00001,"code":"PR"},{"value":0.00001,"code":"VI"},{"value":0.00001,"code":"GU"},{"value":0.00001,"code":"MP"},{"value":0.00001,"code":"AS"}],
+					joinBy: ['postal-code', 'code'],
+					dataLabels: {
+						enabled: true,
+						color: '#FFFFFF',
+						format: '{point.code}'
+					},
+					name: 'Population density',
+					tooltip: {
+						pointFormatter:  function(point) {
+							if (point.value <= 0){
+								return point.code +': {0}'
+							}
+							return point.code+':'+point.value
+						}
+					}
+				}]
+			});
+			});
+		</script>
+		</body>
+		

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -551,4 +552,209 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 
 	s3Manageer.UploadFile("covid-19-us-dataset", fmt.Sprintf("states/%s.html", stateID))
 	time.Sleep(2 * time.Second)
+}
+
+func (g *Graph) DrawUSMapGraph(data []Daily) {
+
+	fmt.Println("generating us maps")
+
+	type StateDatapoint struct {
+		Value float64 `json:"value"`
+		Code  string  `json:"code"`
+	}
+
+	var deaths []StateDatapoint
+	var positive []StateDatapoint
+	var negative []StateDatapoint
+	var pending []StateDatapoint
+	var total []StateDatapoint
+
+	for _, v := range data {
+
+		date := data[0].Date
+
+		if v.Date != date {
+			break
+		}
+
+		var deathVal float64
+		if v.Death == 0 {
+			deathVal = 0.00001
+		} else {
+			deathVal = float64(v.Death)
+		}
+
+		deaths = append(deaths, StateDatapoint{Value: deathVal, Code: v.State})
+
+		var posVal float64
+		if v.Positive == 0 {
+			posVal = 0.00001
+		} else {
+			posVal = float64(v.Positive)
+		}
+
+		positive = append(positive, StateDatapoint{Value: posVal, Code: v.State})
+
+		var negVal float64
+		if v.Death == 0 {
+			negVal = 0.00001
+		} else {
+			negVal = float64(v.Negative)
+		}
+
+		negative = append(negative, StateDatapoint{Value: negVal, Code: v.State})
+
+		var penVal float64
+		if v.Pending == 0 {
+			penVal = 0.00001
+		} else {
+			penVal = float64(v.Pending)
+		}
+
+		pending = append(pending, StateDatapoint{Value: penVal, Code: v.State})
+
+		var totalVal float64
+		if v.Total == 0 {
+			totalVal = 0.00001
+		} else {
+			totalVal = float64(v.Total)
+		}
+
+		total = append(total, StateDatapoint{Value: totalVal, Code: strings.ToLower(v.State)})
+
+	}
+
+	deathsJson, err := json.Marshal(&deaths)
+	if err != nil {
+		log.Fatal(err)
+	}
+	positiveJson, err := json.Marshal(&positive)
+	if err != nil {
+		log.Fatal(err)
+	}
+	negaitveJson, err := json.Marshal(&negative)
+	if err != nil {
+		log.Fatal(err)
+	}
+	pendingJson, err := json.Marshal(&pending)
+	if err != nil {
+		log.Fatal(err)
+	}
+	totalJson, err := json.Marshal(&total)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(deaths)
+	fmt.Println(string(deathsJson))
+
+	fmt.Println(deaths)
+	fmt.Println(string(positiveJson))
+
+	fmt.Println(negative)
+	fmt.Println(string(negaitveJson))
+
+	fmt.Println(pending)
+	fmt.Println(string(pendingJson))
+
+	fmt.Println(total)
+	fmt.Println(string(totalJson))
+
+	str := `<!DOCTYPE html>
+		<head>
+		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+		<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+		</head>
+
+		<body style="background-color:#2A2D34;">
+
+		<div id="container-death" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
+		<div id="container-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
+		<div id="container-pending" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<hr>
+		<div id="container-total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+		<script>
+
+		$(function () {
+			$('#container-death').highcharts('Map',{
+
+				chart: {
+					map: 'countries/us/us-all',
+					borderWidth: 1
+				},
+		
+				title: {
+					text: 'US population density (/km²)'
+				},
+		
+				exporting: {
+					sourceWidth: 600,
+					sourceHeight: 500
+				},
+		
+				legend: {
+					layout: 'horizontal',
+					borderWidth: 0,
+					backgroundColor: 'rgba(255,255,255,0.85)',
+					floating: true,
+					verticalAlign: 'top',
+					y: 25
+				},
+		
+				mapNavigation: {
+					enabled: true
+				},
+		
+				colorAxis: {
+					min: 1,
+					type: 'logarithmic',
+					minColor: '#EEEEFF',
+					maxColor: '#000022',
+					stops: [
+						[0, '#EFEFFF'],
+						[0.67, '#4444FF'],
+						[1, '#000022']
+					]
+				},
+		
+				series: [{
+					animation: {
+						duration: 1000
+					},
+					data: %s,
+					joinBy: ['postal-code', 'code'],
+					dataLabels: {
+						enabled: true,
+						color: '#FFFFFF',
+						format: '{point.code}'
+					},
+					name: 'Population density',
+					tooltip: {
+						pointFormat: '{point.code}: {point.value}/km²'
+					}
+				}]
+			});
+			});
+		</script>
+		</body>
+	`
+
+	bt := []byte(fmt.Sprintf(str, deathsJson))
+
+	err = ioutil.WriteFile("test.html", bt, 0644)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// var s3Manageer S3Manager
+
+	// s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
 }

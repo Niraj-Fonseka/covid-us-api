@@ -10,6 +10,9 @@ run:
 draw:
 	curl http://localhost:8080/draw
 
+test:
+	curl http://localhost:8080/test
+
 
 drawstate:
 	curl http://localhost:8080/drawstate?state=AK
