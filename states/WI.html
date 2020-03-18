@@ -3,16 +3,66 @@
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+
 		</head>
 		<style>
-			#date-title{
+			#state-title{
 				text-align: center;
+				color: #E0E0E3;
+			}
+
+			#dropdown{
+				background-color:gainsboro;
+				width: 120px;
+				height: 30px;
+				display: block;
+				font-size: 15px;
+				border: none;
+				margin: 0 auto;
+				border-radius: 5px;
+			}
+
+
+			#goback{
+				border-radius: 5px;
+				width: 50px;
+				height: 30px;
+				border: none;
+				font-size: 15px;
+				background-color: gainsboro;
+				display: block;
+				padding-left: 10px;
+				padding-top: 10px;
+				margin: 0 auto;
+			}
+
+			#gobackwrapper{
+				padding: 10px;
+			}
+
+			#dropdownwrapper{
+				padding: 10px;
 			}
 		</style>
-		<body>
+		
+		<body style="background-color:#2A2D34;">
 
-		<div>
+		
+
+		<div id="state-title">
+			<h1> Currently viewing data for : WI</h1>
+		</div>
+
+
+		<div id="gobackwrapper"> 
+			<div id="goback">Home</div>
+		</div>
+
+
+		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
+				<option>select state</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AK">AK</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AL">AL</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AR">AR</option>
@@ -80,7 +130,11 @@
 
 		$('#dropdown').change(function(){
 			var value = $(this).children("option:selected").val();
-			window.open(value+'.html','statename')
+			location.href = value+'.html'
+		});
+
+		$('#goback').click(function(){
+			location.href = 'https://covid-19-us-dataset.s3.amazonaws.com/covid.html'
 		});
 	
 		$(function () {
@@ -89,7 +143,8 @@
 					text : 'Deaths Trending'
 				},
 				chart: {
-					type: 'line'
+					type: 'line',
+					backgroundColor: '#2A2D34'
 				},
 				xAxis: {
 					type: 'datetime',
@@ -102,6 +157,13 @@
 				},
 			
 				plotOptions: {
+					line: {
+            			dataLabels: {
+                			enabled: true
+            			},
+            		enableMouseTracking: false
+					},
+					
 					series: {
 						fillOpacity: 0.1
 					}
@@ -117,7 +179,8 @@
 					text : 'Positive Trending'
 				},
 				chart: {
-					type: 'line'
+					type: 'line',
+					backgroundColor: '#2A2D34'
 				},
 				xAxis: {
 					type: 'datetime',
@@ -130,6 +193,13 @@
 				},
 			
 				plotOptions: {
+					line: {
+            			dataLabels: {
+                			enabled: true
+            			},
+            		enableMouseTracking: false
+        			},
+					
 					series: {
 						fillOpacity: 0.1
 					}

@@ -6,6 +6,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Graph struct {
@@ -56,18 +57,37 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+
 		</head>
 		<style>
 			#date-title{
 				text-align: center;
+				color: #E0E0E3;
+			}
+
+			#dropdown{
+				background-color:gainsboro;
+				width: 120px;
+				height: 30px;
+				display: block;
+				font-size: 15px;
+				border: none;
+				margin: 0 auto;
+				border-radius: 5px;
+			}
+
+			#dropdownwrapper{
+				padding: 10px;
 			}
 		</style>
-		<body>
+		<body style="background-color:#2A2D34;">
 		<div id="date-title">
 			<h1>%s</h1>
 		</div>
-		<div>
+		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
+				<option>select state</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AK">AK</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AL">AL</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AR">AR</option>
@@ -138,7 +158,7 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		<script>
 		$('#dropdown').change(function(){
 			var value = $(this).children("option:selected").val();
-			window.open(value+'.html','statename')
+			location.href = value+'.html'
 		});
 	
 		$(function () {
@@ -147,7 +167,8 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					text : 'Deaths'
 				},
 				chart: {
-					type: 'column'
+					type: 'column',
+					backgroundColor: '#2A2D34'
 				},
 				xAxis: {
 					title:{
@@ -157,6 +178,9 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 				},
 			
 				plotOptions: {
+					column:{
+						borderColor: null
+					},
 					series: {
 						fillOpacity: 0.1
 					}
@@ -172,9 +196,10 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 				title:{
 					text : 'Positive Cases'
 				},
-					chart: {
-						type: 'column'
-					},
+				chart: {
+					type: 'column',
+					backgroundColor: '#2A2D34'
+				},
 					xAxis: {
 						title:{
 							text: 'Positive Cases'
@@ -183,6 +208,9 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					},
 
 					plotOptions: {
+						column:{
+							borderColor: null
+						},
 						series: {
 							fillOpacity: 0.1
 						}
@@ -197,9 +225,10 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 				title:{
 					text : 'Pending Results'
 				},
-					chart: {
-						type: 'column'
-					},
+				chart: {
+					type: 'column',
+					backgroundColor: '#2A2D34'
+				},
 					xAxis: {
 						title:{
 							text: 'Pending Results'
@@ -209,6 +238,9 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					
 				
 					plotOptions: {
+						column:{
+							borderColor: null
+						},
 						series: {
 							fillOpacity: 0.1
 						}
@@ -224,7 +256,8 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 						text : 'Total Cases'
 					},
 					chart: {
-						type: 'column'
+						type: 'column',
+						backgroundColor: '#2A2D34'
 					},
 					xAxis: {
 						title:{
@@ -234,6 +267,9 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 					},
 				
 					plotOptions: {
+						column:{
+							borderColor: null
+						},
 						series: {
 							fillOpacity: 0.1
 						}
@@ -292,16 +328,66 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+
 		</head>
 		<style>
-			#date-title{
+			#state-title{
 				text-align: center;
+				color: #E0E0E3;
+			}
+
+			#dropdown{
+				background-color:gainsboro;
+				width: 120px;
+				height: 30px;
+				display: block;
+				font-size: 15px;
+				border: none;
+				margin: 0 auto;
+				border-radius: 5px;
+			}
+
+
+			#goback{
+				border-radius: 5px;
+				width: 50px;
+				height: 30px;
+				border: none;
+				font-size: 15px;
+				background-color: gainsboro;
+				display: block;
+				padding-left: 10px;
+				padding-top: 10px;
+				margin: 0 auto;
+			}
+
+			#gobackwrapper{
+				padding: 10px;
+			}
+
+			#dropdownwrapper{
+				padding: 10px;
 			}
 		</style>
-		<body>
+		
+		<body style="background-color:#2A2D34;">
 
-		<div>
+		
+
+		<div id="state-title">
+			<h1> Currently viewing data for : %s</h1>
+		</div>
+
+
+		<div id="gobackwrapper"> 
+			<div id="goback">Home</div>
+		</div>
+
+
+		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
+				<option>select state</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AK">AK</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AL">AL</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AR">AR</option>
@@ -369,7 +455,11 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 
 		$('#dropdown').change(function(){
 			var value = $(this).children("option:selected").val();
-			window.open(value+'.html','statename')
+			location.href = value+'.html'
+		});
+
+		$('#goback').click(function(){
+			location.href = 'https://covid-19-us-dataset.s3.amazonaws.com/covid.html'
 		});
 	
 		$(function () {
@@ -378,7 +468,8 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 					text : 'Deaths Trending'
 				},
 				chart: {
-					type: 'line'
+					type: 'line',
+					backgroundColor: '#2A2D34'
 				},
 				xAxis: {
 					type: 'datetime',
@@ -391,6 +482,13 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 				},
 			
 				plotOptions: {
+					line: {
+            			dataLabels: {
+                			enabled: true
+            			},
+            		enableMouseTracking: false
+					},
+					
 					series: {
 						fillOpacity: 0.1
 					}
@@ -406,7 +504,8 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 					text : 'Positive Trending'
 				},
 				chart: {
-					type: 'line'
+					type: 'line',
+					backgroundColor: '#2A2D34'
 				},
 				xAxis: {
 					type: 'datetime',
@@ -419,6 +518,13 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 				},
 			
 				plotOptions: {
+					line: {
+            			dataLabels: {
+                			enabled: true
+            			},
+            		enableMouseTracking: false
+        			},
+					
 					series: {
 						fillOpacity: 0.1
 					}
@@ -433,7 +539,7 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 		</script>
 		</body>
 	`
-	bt := []byte(fmt.Sprintf(str, "'%y-%m-%e'", y1, "'%y-%m-%e'", y2))
+	bt := []byte(fmt.Sprintf(str, stateID, "'%y-%m-%e'", y1, "'%y-%m-%e'", y2))
 
 	err := ioutil.WriteFile(fmt.Sprintf("states/%s.html", stateID), bt, 0644)
 
@@ -444,5 +550,5 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 	var s3Manageer S3Manager
 
 	s3Manageer.UploadFile("covid-19-us-dataset", fmt.Sprintf("states/%s.html", stateID))
-
+	time.Sleep(2 * time.Second)
 }

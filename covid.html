@@ -3,18 +3,37 @@
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+
 		</head>
 		<style>
 			#date-title{
 				text-align: center;
+				color: #E0E0E3;
+			}
+
+			#dropdown{
+				background-color:gainsboro;
+				width: 120px;
+				height: 30px;
+				display: block;
+				font-size: 15px;
+				border: none;
+				margin: 0 auto;
+				border-radius: 5px;
+			}
+
+			#dropdownwrapper{
+				padding: 10px;
 			}
 		</style>
-		<body>
+		<body style="background-color:#2A2D34;">
 		<div id="date-title">
 			<h1>2020-03-17</h1>
 		</div>
-		<div>
+		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
+				<option>select state</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AK">AK</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AL">AL</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AR">AR</option>
@@ -85,7 +104,7 @@
 		<script>
 		$('#dropdown').change(function(){
 			var value = $(this).children("option:selected").val();
-			window.open(value+'.html','statename')
+			location.href = value+'.html'
 		});
 	
 		$(function () {
@@ -94,7 +113,8 @@
 					text : 'Deaths'
 				},
 				chart: {
-					type: 'column'
+					type: 'column',
+					backgroundColor: '#2A2D34'
 				},
 				xAxis: {
 					title:{
@@ -160,6 +180,9 @@
 				},
 			
 				plotOptions: {
+					column:{
+						borderColor: null
+					},
 					series: {
 						fillOpacity: 0.1
 					}
@@ -175,9 +198,10 @@
 				title:{
 					text : 'Positive Cases'
 				},
-					chart: {
-						type: 'column'
-					},
+				chart: {
+					type: 'column',
+					backgroundColor: '#2A2D34'
+				},
 					xAxis: {
 						title:{
 							text: 'Positive Cases'
@@ -242,6 +266,9 @@
 					},
 
 					plotOptions: {
+						column:{
+							borderColor: null
+						},
 						series: {
 							fillOpacity: 0.1
 						}
@@ -256,9 +283,10 @@
 				title:{
 					text : 'Pending Results'
 				},
-					chart: {
-						type: 'column'
-					},
+				chart: {
+					type: 'column',
+					backgroundColor: '#2A2D34'
+				},
 					xAxis: {
 						title:{
 							text: 'Pending Results'
@@ -324,6 +352,9 @@
 					
 				
 					plotOptions: {
+						column:{
+							borderColor: null
+						},
 						series: {
 							fillOpacity: 0.1
 						}
@@ -339,7 +370,8 @@
 						text : 'Total Cases'
 					},
 					chart: {
-						type: 'column'
+						type: 'column',
+						backgroundColor: '#2A2D34'
 					},
 					xAxis: {
 						title:{
@@ -405,6 +437,9 @@
 					},
 				
 					plotOptions: {
+						column:{
+							borderColor: null
+						},
 						series: {
 							fillOpacity: 0.1
 						}
