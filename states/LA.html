@@ -10,9 +10,7 @@
 			}
 		</style>
 		<body>
-		<div id="date-title">
-			<h1>2020-03-17</h1>
-		</div>
+
 		<div>
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AK">AK</option>
@@ -74,89 +72,33 @@
 			</select>
 		</div> 
 		
-		<div id="container-death" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-pending" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		
+		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	
 		<script>
+
 		$('#dropdown').change(function(){
 			var value = $(this).children("option:selected").val();
 			window.open(value+'.html','statename')
 		});
 	
 		$(function () {
-			$('#container-death').highcharts( {
+			$('#state-trending-deaths').highcharts( {
 				title:{
-					text : 'Deaths'
+					text : 'Deaths Trending'
 				},
 				chart: {
-					type: 'column'
+					type: 'line'
 				},
 				xAxis: {
-					title:{
-						text: 'Deaths'
+					type: 'datetime',
+					dateTimeLabelFormats: {
+						day: '%y-%m-%e'
 					},
-					categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
+					title:{
+						text: 'dates'
+					},
 				},
 			
 				plotOptions: {
@@ -167,255 +109,38 @@
 			
 				series: [{
 					name: "deaths",
-					data: [0,0,0,0,11,1,0,0,0,6,1,0,0,0,1,2,1,1,4,0,0,0,0,0,0,0,0,0,0,0,0,3,0,1,7,0,0,0,0,0,1,0,0,1,0,1,0,48,0,0,0,0,0,0,0,0]
+					data: [[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),2],[Date.UTC(2020, 2, 16),2],[Date.UTC(2020, 2, 17),4]]
 				}]
 			});
-			
-			$('#container-positive').highcharts( {
+			$('#state-trending-positive').highcharts( {
 				title:{
-					text : 'Positive Cases'
+					text : 'Positive Trending'
 				},
-					chart: {
-						type: 'column'
-					},
-					xAxis: {
-						title:{
-							text: 'Positive Cases'
-						},
-						categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
-					},
-
-					plotOptions: {
-						series: {
-							fillOpacity: 0.1
-						}
-					},
-				
-					series: [{
-						name: "positive",
-						data: [3,36,22,20,483,160,41,22,16,186,146,10,23,7,160,30,15,22,171,218,57,32,65,60,8,21,8,40,3,21,17,267,23,55,1700,67,17,47,96,21,33,11,73,64,51,67,10,904,72,0,10,5,2,5,0,0]
-					}]
-				});
-			$('#container-pending').highcharts( {
-				title:{
-					text : 'Pending Results'
+				chart: {
+					type: 'line'
 				},
-					chart: {
-						type: 'column'
+				xAxis: {
+					type: 'datetime',
+					dateTimeLabelFormats: {
+						day: '%y-%m-%e'
 					},
-					xAxis: {
-						title:{
-							text: 'Pending Results'
-						},
-						categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
-					},
-					
-				
-					plotOptions: {
-						series: {
-							fillOpacity: 0.1
-						}
-					},
-				
-					series: [{
-						name: "pending",
-						data: [0,0,41,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,195,55,0,0,0,0,82,184,0,149,0,35,0,0,0,0,0,0,0,4,0,4,0,0,0,0]
-					}]
-				});		
-				$('#container-total').highcharts( {
 					title:{
-						text : 'Total Cases'
+						text: 'dates'
 					},
-					chart: {
-						type: 'column'
-					},
-					xAxis: {
-						title:{
-							text: 'Total Cases'
-						},
-						categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
-					},
-				
-					plotOptions: {
-						series: {
-							fillOpacity: 0.1
-						}
-					},
-				
-					series: [{
-						name: "total",
-						data: [337,64,260,228,8407,1216,166,126,52,1126,146,10,106,353,1500,159,397,317,457,1759,151,1335,337,2336,215,389,311,514,223,227,567,485,1272,223,7206,207,346,920,975,478,344,597,403,1268,182,1028,505,12486,1110,84,105,22,2,46,0,0]
-					}]
-				});			
-					});
+				},
+			
+				plotOptions: {
+					series: {
+						fillOpacity: 0.1
+					}
+				},
+			
+				series: [{
+					name: "positive",
+					data: [[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),1],[Date.UTC(2020, 2, 10),1],[Date.UTC(2020, 2, 11),6],[Date.UTC(2020, 2, 12),14],[Date.UTC(2020, 2, 13),36],[Date.UTC(2020, 2, 14),69],[Date.UTC(2020, 2, 15),91],[Date.UTC(2020, 2, 16),114],[Date.UTC(2020, 2, 17),171]]
+				}]
+			});
+			});
 		</script>
 		</body>
 	

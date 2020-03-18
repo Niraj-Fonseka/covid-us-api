@@ -16,6 +16,7 @@ func main() {
 
 	http.HandleFunc("/daily", handlers.SlackHandler)
 	http.HandleFunc("/draw", handlers.DrawGraph)
+	http.HandleFunc("/drawstate", handlers.DrawGraphState)
 	fmt.Println("Listening..")
 	http.ListenAndServe(":8080", nil)
 

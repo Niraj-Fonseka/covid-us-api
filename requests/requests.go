@@ -15,7 +15,6 @@ func (r *Request) NewGetRequest(route string) ([]byte, error) {
 
 	builtURL, _ := buildURL(r.BaseURL, route)
 
-	fmt.Printf("Build URL : %s \n", builtURL)
 	//TO DO : Error check
 
 	request, err := http.NewRequest("GET", builtURL, nil)

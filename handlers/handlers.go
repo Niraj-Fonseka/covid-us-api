@@ -28,3 +28,14 @@ func (h *Handlers) DrawGraph(w http.ResponseWriter, r *http.Request) {
 	}
 	h.Services.Graph.DrawDeathsGraph(response)
 }
+
+func (h *Handlers) DrawGraphState(w http.ResponseWriter, r *http.Request) {
+	queryValues := r.URL.Query()
+	state := queryValues.Get("state")
+	response, err := h.Services.Covid.GetDailyCasesUSByState(state)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	h.Services.Graph.RenderStatePage(state, response)
+}

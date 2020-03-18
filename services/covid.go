@@ -3,6 +3,7 @@ package services
 import (
 	"covid-us-api/requests"
 	"encoding/json"
+	"fmt"
 )
 
 type Daily struct {
@@ -35,4 +36,26 @@ func (c *Covid) GetDailyCasesUS() ([]Daily, error) {
 	}
 
 	return dailyValues, nil
+}
+
+func (c *Covid) GetDailyCasesUSByState(state string) ([]Daily, error) {
+
+	buildURL := fmt.Sprintf("/api/states/daily?state=%s", state)
+
+	response, err := c.Request.NewGetRequest(buildURL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var dailyValues []Daily
+
+	err = json.Unmarshal(response, &dailyValues)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return dailyValues, nil
+
 }
