@@ -16,6 +16,15 @@ type Daily struct {
 	Total    int    `json:"total"`
 }
 
+type Summary struct {
+	Positive int `json:"positive"`
+	Negative int `json:"negative"`
+	PosNeg   int `json:"posNeg"`
+	Pending  int `json:"pending"`
+	Death    int `json:"death"`
+	Total    int `json:"total"`
+}
+
 type Covid struct {
 	Request *requests.Request
 }
@@ -58,4 +67,23 @@ func (c *Covid) GetDailyCasesUSByState(state string) ([]Daily, error) {
 
 	return dailyValues, nil
 
+}
+
+func (c *Covid) GetUSSummary() ([]Summary, error) {
+
+	response, err := c.Request.NewGetRequest("/api/us")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var usSummary []Summary
+
+	err = json.Unmarshal(response, &usSummary)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return usSummary, nil
 }

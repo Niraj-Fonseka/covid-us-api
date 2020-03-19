@@ -35,7 +35,14 @@ func (h *Handlers) DrawGraphUSMAP(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	h.Services.Graph.DrawUSMapGraph(response)
+
+	summaryResponse, err := h.Services.Covid.GetUSSummary()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	h.Services.Graph.DrawUSMapGraph(response, summaryResponse)
 }
 
 func (h *Handlers) DrawGraphState(w http.ResponseWriter, r *http.Request) {
@@ -46,5 +53,6 @@ func (h *Handlers) DrawGraphState(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
 	h.Services.Graph.RenderStatePage(state, response)
 }

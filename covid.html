@@ -1,35 +1,84 @@
 <!DOCTYPE html>
 		<head>
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="https://code.highcharts.com/highcharts.js"></script>
-		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
 		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+		<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
 
 		</head>
 		<style>
-			#date-title{
-				text-align: center;
-				color: #E0E0E3;
-			}
+		#date-title{
+			text-align: center;
+			color: #E0E0E3;
+		}
 
-			#dropdown{
-				background-color:gainsboro;
-				width: 120px;
-				height: 30px;
-				display: block;
-				font-size: 15px;
-				border: none;
-				margin: 0 auto;
-				border-radius: 5px;
-			}
+		#dropdown{
+			background-color:gainsboro;
+			width: 120px;
+			height: 30px;
+			display: block;
+			font-size: 15px;
+			border: none;
+			margin: 0 auto;
+			border-radius: 5px;
+		}
 
-			#dropdownwrapper{
-				padding: 10px;
-			}
+		#dropdownwrapper{
+			padding: 10px;
+		}
+
+		#banner{
+			display: flex; /* equal height of the children */
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+		#positive{
+			flex: 1; /* additionally, equal width */
+			padding: 1em;
+			border:1px solid black;
+			height: 100px;
+			border-radius: 2px;
+			text-align: center;
+			border-color: #393e46;
+		}
+
+		#category{
+			font-size: 40px;
+			color: #00adb5;
+		}
+		#negative{
+			display: inline-block;
+		}
+
+		#pending{
+			display: inline-block;
+		}
+
+		#death{
+			display: inline-block;
+		}
+
+		#total{
+			display: inline-block;
+		}
+
+		#number{
+			flex: 1; /* additionally, equal width */
+			font-size: 30px;
+			margin-top: 10px;
+			color: #eeeeee;
+
+		}
 		</style>
+
+		
 		<body style="background-color:#2A2D34;">
 		<div id="date-title">
-			<h1>2020-03-17</h1>
+			<h1>2020-03-18</h1>
 		</div>
 		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
@@ -92,365 +141,193 @@
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
-		
-		<div id="container-death" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-pending" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<div id="banner">
+		<div id="positive">
+		   <div id="category">
+			   Positive
+		   </div>
+		   <div id="number">
+				8131
+		   </div>
+		</div>
+
+		<div id="positive">
+			<div id="category">
+				Negative
+			</div>
+			<div id="number">
+				71635
+			</div>
+		</div>
+
+		<div id="positive">
+			<div id="category">
+				Pending
+			</div>
+			<div id="number">
+				2805
+			</div>
+		</div>
+
+		<div id="positive">
+			<div id="category">
+				Deaths
+			</div>
+			<div id="number">
+				132
+			</div>
+		</div>
+
+		<div id="positive">
+			<div id="category">
+				Total
+			</div>
+			<div id="number">
+				82571
+			</div>
+		</div>
+	</div>
+		<div id="container-death" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+		<div id="container-positive" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
 		<script>
+
+
 		$('#dropdown').change(function(){
 			var value = $(this).children("option:selected").val();
 			location.href = value+'.html'
 		});
-	
+
+		$('#goback').click(function(){
+			location.href = 'https://covid-19-us-dataset.s3.amazonaws.com/covid.html'
+		});
+
 		$(function () {
-			$('#container-death').highcharts( {
-				title:{
-					text : 'Deaths'
-				},
+			$('#container-death').highcharts('Map',{
+
 				chart: {
-					type: 'column',
-					backgroundColor: '#2A2D34'
+					map: 'countries/us/us-all',
+					borderWidth: 1
 				},
-				xAxis: {
-					title:{
-						text: 'Deaths'
-					},
-					categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
+		
+				title: {
+					text: 'Deaths'
 				},
-			
-				plotOptions: {
-					column:{
-						borderColor: null
-					},
-					series: {
-						fillOpacity: 0.1
-					}
+		
+				exporting: {
+					sourceWidth: 600,
+					sourceHeight: 500
 				},
-			
+		
+				legend: {
+					layout: 'horizontal',
+					borderWidth: 0,
+					backgroundColor: '#2a2a2b',
+					itemStyle: {
+						color: '#FFF',
+						fontSize: '12px'
+        			},
+					borderRadius: 5,
+					floating: true,
+					verticalAlign: 'top',
+					y: 25
+				},
+		
+				mapNavigation: {
+					enabled: true
+				},
+		
+				colorAxis: {
+					min: 1,
+					type: 'logarithmic',
+					minColor: '#EEEEFF',
+					maxColor: '#000022',
+					stops: [
+						[0, '#EFEFFF'],
+						[0.67, '#4444FF'],
+						[1, '#000022']
+					]
+				},
+		
 				series: [{
-					name: "deaths",
-					data: [0,0,0,0,11,1,0,0,0,6,1,0,0,0,1,2,1,1,4,0,0,0,0,0,0,0,0,0,0,0,0,3,0,1,7,0,0,0,0,0,1,0,0,1,0,1,0,48,0,0,0,0,0,0,0,0]
+					animation: {
+						duration: 1000
+					},
+					data: [{"value":0.00001,"code":"AK"},{"value":0.00001,"code":"AL"},{"value":0.00001,"code":"AR"},{"value":0.00001,"code":"AZ"},{"value":13,"code":"CA"},{"value":2,"code":"CO"},{"value":0.00001,"code":"CT"},{"value":0.00001,"code":"DC"},{"value":0.00001,"code":"DE"},{"value":7,"code":"FL"},{"value":1,"code":"GA"},{"value":0.00001,"code":"HI"},{"value":0.00001,"code":"IA"},{"value":0.00001,"code":"ID"},{"value":1,"code":"IL"},{"value":2,"code":"IN"},{"value":1,"code":"KS"},{"value":1,"code":"KY"},{"value":6,"code":"LA"},{"value":0.00001,"code":"MA"},{"value":0.00001,"code":"MD"},{"value":0.00001,"code":"ME"},{"value":0.00001,"code":"MI"},{"value":0.00001,"code":"MN"},{"value":0.00001,"code":"MO"},{"value":0.00001,"code":"MS"},{"value":0.00001,"code":"MT"},{"value":0.00001,"code":"NC"},{"value":0.00001,"code":"ND"},{"value":0.00001,"code":"NE"},{"value":0.00001,"code":"NH"},{"value":5,"code":"NJ"},{"value":0.00001,"code":"NM"},{"value":1,"code":"NV"},{"value":12,"code":"NY"},{"value":0.00001,"code":"OH"},{"value":0.00001,"code":"OK"},{"value":3,"code":"OR"},{"value":0.00001,"code":"PA"},{"value":0.00001,"code":"RI"},{"value":1,"code":"SC"},{"value":1,"code":"SD"},{"value":0.00001,"code":"TN"},{"value":2,"code":"TX"},{"value":0.00001,"code":"UT"},{"value":1,"code":"VA"},{"value":0.00001,"code":"VT"},{"value":52,"code":"WA"},{"value":0.00001,"code":"WI"},{"value":0.00001,"code":"WV"},{"value":0.00001,"code":"WY"},{"value":0.00001,"code":"PR"},{"value":0.00001,"code":"VI"},{"value":0.00001,"code":"GU"},{"value":0.00001,"code":"MP"},{"value":0.00001,"code":"AS"}],
+					joinBy: ['postal-code', 'code'],
+					dataLabels: {
+						enabled: true,
+						color: '#FFFFFF',
+						format: '{point.code}'
+					},
+					name: 'deaths',
+					tooltip: {
+						headerFormat: '',
+						pointFormat: '<span style="font-size:23px">{point.name}: <b style="font-size:30px">{point.value:.1f} </b></span>',
+					}
 				}]
 			});
-			
-			$('#container-positive').highcharts( {
-				title:{
-					text : 'Positive Cases'
-				},
-				chart: {
-					type: 'column',
-					backgroundColor: '#2A2D34'
-				},
-					xAxis: {
-						title:{
-							text: 'Positive Cases'
-						},
-						categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
-					},
 
-					plotOptions: {
-						column:{
-							borderColor: null
-						},
-						series: {
-							fillOpacity: 0.1
-						}
-					},
-				
-					series: [{
-						name: "positive",
-						data: [3,36,22,20,483,160,41,22,16,186,146,10,23,7,160,30,15,22,171,218,57,32,65,60,8,21,8,40,3,21,17,267,23,55,1700,67,17,47,96,21,33,11,73,64,51,67,10,904,72,0,10,5,2,5,0,0]
-					}]
-				});
-			$('#container-pending').highcharts( {
-				title:{
-					text : 'Pending Results'
-				},
+			$('#container-positive').highcharts('Map',{
+
 				chart: {
-					type: 'column',
-					backgroundColor: '#2A2D34'
+					map: 'countries/us/us-all',
+					borderWidth: 1
 				},
-					xAxis: {
-						title:{
-							text: 'Pending Results'
-						},
-						categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
+		
+				title: {
+					text: 'Positive cases'
+				},
+		
+				exporting: {
+					sourceWidth: 600,
+					sourceHeight: 500
+				},
+		
+				legend: {
+					layout: 'horizontal',
+					borderWidth: 0,
+					backgroundColor: '#2a2a2b',
+					borderRadius: 5,
+					floating: true,
+					verticalAlign: 'top',
+					y: 25
+				},
+		
+				mapNavigation: {
+					enabled: true
+				},
+		
+				colorAxis: {
+					min: 1,
+					type: 'logarithmic',
+					minColor: '#EEEEFF',
+					maxColor: '#000022',
+					stops: [
+						[0, '#EFEFFF'],
+						[0.67, '#4444FF'],
+						[1, '#000022']
+					]
+				},
+		
+				series: [{
+					animation: {
+						duration: 1000
 					},
-					
-				
-					plotOptions: {
-						column:{
-							borderColor: null
-						},
-						series: {
-							fillOpacity: 0.1
-						}
+					data: [{"value":6,"code":"AK"},{"value":46,"code":"AL"},{"value":33,"code":"AR"},{"value":28,"code":"AZ"},{"value":611,"code":"CA"},{"value":183,"code":"CO"},{"value":68,"code":"CT"},{"value":31,"code":"DC"},{"value":25,"code":"DE"},{"value":314,"code":"FL"},{"value":197,"code":"GA"},{"value":14,"code":"HI"},{"value":29,"code":"IA"},{"value":9,"code":"ID"},{"value":289,"code":"IL"},{"value":39,"code":"IN"},{"value":16,"code":"KS"},{"value":26,"code":"KY"},{"value":240,"code":"LA"},{"value":256,"code":"MA"},{"value":85,"code":"MD"},{"value":43,"code":"ME"},{"value":80,"code":"MI"},{"value":77,"code":"MN"},{"value":13,"code":"MO"},{"value":34,"code":"MS"},{"value":10,"code":"MT"},{"value":63,"code":"NC"},{"value":6,"code":"ND"},{"value":24,"code":"NE"},{"value":26,"code":"NH"},{"value":427,"code":"NJ"},{"value":28,"code":"NM"},{"value":55,"code":"NV"},{"value":2382,"code":"NY"},{"value":88,"code":"OH"},{"value":29,"code":"OK"},{"value":75,"code":"OR"},{"value":133,"code":"PA"},{"value":33,"code":"RI"},{"value":60,"code":"SC"},{"value":11,"code":"SD"},{"value":98,"code":"TN"},{"value":83,"code":"TX"},{"value":63,"code":"UT"},{"value":77,"code":"VA"},{"value":19,"code":"VT"},{"value":1012,"code":"WA"},{"value":106,"code":"WI"},{"value":1,"code":"WV"},{"value":15,"code":"WY"},{"value":5,"code":"PR"},{"value":2,"code":"VI"},{"value":8,"code":"GU"},{"value":0.00001,"code":"MP"},{"value":0.00001,"code":"AS"}],
+					joinBy: ['postal-code', 'code'],
+					dataLabels: {
+						enabled: true,
+						color: '#FFFFFF',
+						format: '{point.code}'
 					},
-				
-					series: [{
-						name: "pending",
-						data: [0,0,41,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,195,55,0,0,0,0,82,184,0,149,0,35,0,0,0,0,0,0,0,4,0,4,0,0,0,0]
-					}]
-				});		
-				$('#container-total').highcharts( {
-					title:{
-						text : 'Total Cases'
-					},
-					chart: {
-						type: 'column',
-						backgroundColor: '#2A2D34'
-					},
-					xAxis: {
-						title:{
-							text: 'Total Cases'
-						},
-						categories: ['AK'
-,'AL'
-,'AR'
-,'AZ'
-,'CA'
-,'CO'
-,'CT'
-,'DC'
-,'DE'
-,'FL'
-,'GA'
-,'HI'
-,'IA'
-,'ID'
-,'IL'
-,'IN'
-,'KS'
-,'KY'
-,'LA'
-,'MA'
-,'MD'
-,'ME'
-,'MI'
-,'MN'
-,'MO'
-,'MS'
-,'MT'
-,'NC'
-,'ND'
-,'NE'
-,'NH'
-,'NJ'
-,'NM'
-,'NV'
-,'NY'
-,'OH'
-,'OK'
-,'OR'
-,'PA'
-,'RI'
-,'SC'
-,'SD'
-,'TN'
-,'TX'
-,'UT'
-,'VA'
-,'VT'
-,'WA'
-,'WI'
-,'WV'
-,'WY'
-,'PR'
-,'VI'
-,'GU'
-,'MP'
-,'AS'
-]
-					},
-				
-					plotOptions: {
-						column:{
-							borderColor: null
-						},
-						series: {
-							fillOpacity: 0.1
-						}
-					},
-				
-					series: [{
-						name: "total",
-						data: [337,64,260,228,8407,1216,166,126,52,1126,146,10,106,353,1500,159,397,317,457,1759,151,1335,337,2336,215,389,311,514,223,227,567,485,1272,223,7206,207,346,920,975,478,344,597,403,1268,182,1028,505,12486,1110,84,105,22,2,46,0,0]
-					}]
-				});			
-					});
+					name: 'positive',
+					tooltip: {
+						headerFormat: '',
+						pointFormat: '<span style="font-size:23px">{point.name}: <b style="font-size:30px">{point.value:.1f} </b></span>',
+					}
+				}]
+			});
+			});
 		</script>
 		</body>
 	
