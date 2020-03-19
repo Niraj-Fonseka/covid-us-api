@@ -554,7 +554,7 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 	time.Sleep(2 * time.Second)
 }
 
-func (g *Graph) DrawUSMapGraph(data []Daily) {
+func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
 
 	fmt.Println("generating us maps")
 
@@ -632,33 +632,23 @@ func (g *Graph) DrawUSMapGraph(data []Daily) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	negaitveJson, err := json.Marshal(&negative)
-	if err != nil {
-		log.Fatal(err)
-	}
-	pendingJson, err := json.Marshal(&pending)
-	if err != nil {
-		log.Fatal(err)
-	}
-	totalJson, err := json.Marshal(&total)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// negaitveJson, err := json.Marshal(&negative)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// pendingJson, err := json.Marshal(&pending)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// totalJson, err := json.Marshal(&total)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println(deaths)
-	fmt.Println(string(deathsJson))
+	date := data[0].Date
 
-	fmt.Println(deaths)
-	fmt.Println(string(positiveJson))
-
-	fmt.Println(negative)
-	fmt.Println(string(negaitveJson))
-
-	fmt.Println(pending)
-	fmt.Println(string(pendingJson))
-
-	fmt.Println(total)
-	fmt.Println(string(totalJson))
+	dateString := strconv.Itoa(date)
+	dateTitle := fmt.Sprintf("%s-%s-%s", dateString[:4], dateString[4:6], dateString[6:])
 
 	str := `<!DOCTYPE html>
 		<head>
@@ -666,21 +656,202 @@ func (g *Graph) DrawUSMapGraph(data []Daily) {
 		<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 		<script src="https://code.highcharts.com/maps/modules/data.js"></script>
 		<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
 		<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
 		<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+
 		</head>
+		<style>
+		#date-title{
+			text-align: center;
+			color: #E0E0E3;
+		}
 
+		#dropdown{
+			background-color:gainsboro;
+			width: 120px;
+			height: 30px;
+			display: block;
+			font-size: 15px;
+			border: none;
+			margin: 0 auto;
+			border-radius: 5px;
+		}
+
+		#dropdownwrapper{
+			padding: 10px;
+		}
+
+		#banner{
+			display: flex; /* equal height of the children */
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+		#positive{
+			flex: 1; /* additionally, equal width */
+			padding: 1em;
+			border:1px solid black;
+			height: 100px;
+			border-radius: 2px;
+			text-align: center;
+			border-color: #393e46;
+		}
+
+		#category{
+			font-size: 40px;
+			color: #00adb5;
+		}
+		#negative{
+			display: inline-block;
+		}
+
+		#pending{
+			display: inline-block;
+		}
+
+		#death{
+			display: inline-block;
+		}
+
+		#total{
+			display: inline-block;
+		}
+
+		#number{
+			flex: 1; /* additionally, equal width */
+			font-size: 30px;
+			margin-top: 10px;
+			color: #eeeeee;
+
+		}
+		</style>
+
+		
 		<body style="background-color:#2A2D34;">
+		<div id="date-title">
+			<h1>%s</h1>
+		</div>
+		<div id="dropdownwrapper">
+			<select id="dropdown" onchange="javascript:handleSelect(this)">
+				<option>select state</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AK">AK</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AL">AL</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AR">AR</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AZ">AZ</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/CA">CA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/CO">CO</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/CT">CT</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/DC">DC</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/DE">DE</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/FL">FL</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/GA">GA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/HI">HI</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/IA">IA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/ID">ID</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/IL">IL</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/IN">IN</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/KS">KS</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/KY">KY</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/LA">LA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MA">MA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MD">MD</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/ME">ME</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MI">MI</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MN">MN</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MO">MO</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MS">MS</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MT">MT</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NC">NC</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/ND">ND</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NE">NE</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NH">NH</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NJ">NJ</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NM">NM</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NV">NV</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/NY">NY</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/OH">OH</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/OK">OK</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/OR">OR</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/PA">PA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/RI">RI</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/SC">SC</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/SD">SD</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/TN">TN</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/TX">TX</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/UT">UT</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/VA">VA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/VT">VT</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WA">WA</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WI">WI</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WV">WV</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WY">WY</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/PR">PR</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/VI">VI</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/GU">GU</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MP">MP</option>
+				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
+			</select>
+		</div> 
+		<div id="banner">
+		<div id="positive">
+		   <div id="category">
+			   Positive
+		   </div>
+		   <div id="number">
+				%d
+		   </div>
+		</div>
 
-		<div id="container-death" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-pending" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		<hr>
-		<div id="container-total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="positive">
+			<div id="category">
+				Negative
+			</div>
+			<div id="number">
+				%d
+			</div>
+		</div>
 
+		<div id="positive">
+			<div id="category">
+				Pending
+			</div>
+			<div id="number">
+				%d
+			</div>
+		</div>
+
+		<div id="positive">
+			<div id="category">
+				Deaths
+			</div>
+			<div id="number">
+				%d
+			</div>
+		</div>
+
+		<div id="positive">
+			<div id="category">
+				Total
+			</div>
+			<div id="number">
+				%d
+			</div>
+		</div>
+	</div>
+		<div id="container-death" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+		<div id="container-positive" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
 		<script>
+
+
+		$('#dropdown').change(function(){
+			var value = $(this).children("option:selected").val();
+			location.href = value+'.html'
+		});
+
+		$('#goback').click(function(){
+			location.href = 'https://covid-19-us-dataset.s3.amazonaws.com/covid.html'
+		});
 
 		$(function () {
 			$('#container-death').highcharts('Map',{
@@ -691,7 +862,7 @@ func (g *Graph) DrawUSMapGraph(data []Daily) {
 				},
 		
 				title: {
-					text: 'US population density (/km²)'
+					text: 'Deaths'
 				},
 		
 				exporting: {
@@ -702,7 +873,12 @@ func (g *Graph) DrawUSMapGraph(data []Daily) {
 				legend: {
 					layout: 'horizontal',
 					borderWidth: 0,
-					backgroundColor: 'rgba(255,255,255,0.85)',
+					backgroundColor: '#2a2a2b',
+					itemStyle: {
+						color: '#FFF',
+						fontSize: '12px'
+        			},
+					borderRadius: 5,
 					floating: true,
 					verticalAlign: 'top',
 					y: 25
@@ -735,9 +911,71 @@ func (g *Graph) DrawUSMapGraph(data []Daily) {
 						color: '#FFFFFF',
 						format: '{point.code}'
 					},
-					name: 'Population density',
+					name: 'deaths',
 					tooltip: {
-						pointFormat: '{point.code}: {point.value}/km²'
+						headerFormat: '',
+						pointFormat: '<span style="font-size:23px">{point.name}: <b style="font-size:30px">{point.value:.1f} </b></span>',
+					}
+				}]
+			});
+
+			$('#container-positive').highcharts('Map',{
+
+				chart: {
+					map: 'countries/us/us-all',
+					borderWidth: 1
+				},
+		
+				title: {
+					text: 'Positive cases'
+				},
+		
+				exporting: {
+					sourceWidth: 600,
+					sourceHeight: 500
+				},
+		
+				legend: {
+					layout: 'horizontal',
+					borderWidth: 0,
+					backgroundColor: '#2a2a2b',
+					borderRadius: 5,
+					floating: true,
+					verticalAlign: 'top',
+					y: 25
+				},
+		
+				mapNavigation: {
+					enabled: true
+				},
+		
+				colorAxis: {
+					min: 1,
+					type: 'logarithmic',
+					minColor: '#EEEEFF',
+					maxColor: '#000022',
+					stops: [
+						[0, '#EFEFFF'],
+						[0.67, '#4444FF'],
+						[1, '#000022']
+					]
+				},
+		
+				series: [{
+					animation: {
+						duration: 1000
+					},
+					data: %s,
+					joinBy: ['postal-code', 'code'],
+					dataLabels: {
+						enabled: true,
+						color: '#FFFFFF',
+						format: '{point.code}'
+					},
+					name: 'positive',
+					tooltip: {
+						headerFormat: '',
+						pointFormat: '<span style="font-size:23px">{point.name}: <b style="font-size:30px">{point.value:.1f} </b></span>',
 					}
 				}]
 			});
@@ -746,15 +984,15 @@ func (g *Graph) DrawUSMapGraph(data []Daily) {
 		</body>
 	`
 
-	bt := []byte(fmt.Sprintf(str, deathsJson))
+	bt := []byte(fmt.Sprintf(str, dateTitle, summary[0].Positive, summary[0].Negative, summary[0].Pending, summary[0].Death, summary[0].Total, deathsJson, positiveJson))
 
-	err = ioutil.WriteFile("test.html", bt, 0644)
+	err = ioutil.WriteFile("covid.html", bt, 0644)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// var s3Manageer S3Manager
+	var s3Manageer S3Manager
 
-	// s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
+	s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
 }
