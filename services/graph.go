@@ -7,7 +7,6 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type Graph struct {
@@ -551,7 +550,6 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 	var s3Manageer S3Manager
 
 	s3Manageer.UploadFile("covid-19-us-dataset", fmt.Sprintf("states/%s.html", stateID))
-	time.Sleep(2 * time.Second)
 }
 
 func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {

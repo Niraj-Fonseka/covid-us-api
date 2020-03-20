@@ -3,6 +3,7 @@ package requests
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -34,6 +35,10 @@ func (r *Request) NewGetRequest(route string) ([]byte, error) {
 		return nil, err
 	}
 
+	if resp.StatusCode != 200 {
+		log.Printf("%s : %d \n", route, resp.StatusCode)
+		return nil, fmt.Errorf("non 200 response code : %d for route : %s ", resp.StatusCode, route)
+	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
