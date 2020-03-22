@@ -7,9 +7,14 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Graph struct {
+}
+
+func (g *Graph) GrawHomePage(data []Daily) {
+
 }
 
 func (g *Graph) DrawDeathsGraph(data []Daily) {
@@ -17,8 +22,18 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 	//date, _ := strconv.Atoi(time.Now().Format("2006-01-02"))
 	date := data[0].Date
 
-	dateString := strconv.Itoa(date)
-	dateTitle := fmt.Sprintf("%s-%s-%s", dateString[:4], dateString[4:6], dateString[6:])
+	loc, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(loc)
+
+	t := time.Now().In(loc)
+	lastUpdated := t.Format(time.RFC822)
+
+	fmt.Println("Last Updated : ", lastUpdated)
+	//dateString := strconv.Itoa(date)
+	//dateTitle := fmt.Sprintf("%s-%s-%s", dateString[:4], dateString[4:6], dateString[6:])
 	var states string
 	var y1 string
 	var y2 string
@@ -83,7 +98,7 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		</style>
 		<body style="background-color:#2A2D34;">
 		<div id="date-title">
-			<h1>%s</h1>
+			<h1>Last updated : %s</h1>
 		</div>
 		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
@@ -284,17 +299,17 @@ func (g *Graph) DrawDeathsGraph(data []Daily) {
 		</script>
 		</body>
 	`
-	bt := []byte(fmt.Sprintf(str, dateTitle, states, y1, states, y2, states, y3, states, y4))
+	bt := []byte(fmt.Sprintf(str, lastUpdated, states, y1, states, y2, states, y3, states, y4))
 
-	err := ioutil.WriteFile("covid.html", bt, 0644)
+	err = ioutil.WriteFile("covid.html", bt, 0644)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var s3Manageer S3Manager
+	// var s3Manageer S3Manager
 
-	s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
+	// s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
 
 }
 
@@ -547,9 +562,9 @@ func (g *Graph) RenderStatePage(stateID string, daily []Daily) {
 		log.Fatal(err)
 	}
 
-	var s3Manageer S3Manager
+	// var s3Manageer S3Manager
 
-	s3Manageer.UploadFile("covid-19-us-dataset", fmt.Sprintf("states/%s.html", stateID))
+	// s3Manageer.UploadFile("covid-19-us-dataset", fmt.Sprintf("states/%s.html", stateID))
 }
 
 func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
@@ -643,10 +658,18 @@ func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
 	// 	log.Fatal(err)
 	// }
 
-	date := data[0].Date
+	// date := data[0].Date
 
-	dateString := strconv.Itoa(date)
-	dateTitle := fmt.Sprintf("%s-%s-%s", dateString[:4], dateString[4:6], dateString[6:])
+	// dateString := strconv.Itoa(date)
+	// dateTitle := fmt.Sprintf("%s-%s-%s", dateString[:4], dateString[4:6], dateString[6:])
+	loc, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(loc)
+
+	t := time.Now().In(loc)
+	lastUpdated := t.Format(time.RFC822)
 
 	str := `<!DOCTYPE html>
 		<head>
@@ -728,7 +751,7 @@ func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
 		
 		<body style="background-color:#2A2D34;">
 		<div id="date-title">
-			<h1>%s</h1>
+			<h1> Last updated : %s</h1>
 		</div>
 		<div id="dropdownwrapper">
 			<select id="dropdown" onchange="javascript:handleSelect(this)">
@@ -982,7 +1005,7 @@ func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
 		</body>
 	`
 
-	bt := []byte(fmt.Sprintf(str, dateTitle, summary[0].Positive, summary[0].Negative, summary[0].Pending, summary[0].Death, summary[0].Total, deathsJson, positiveJson))
+	bt := []byte(fmt.Sprintf(str, lastUpdated, summary[0].Positive, summary[0].Negative, summary[0].Pending, summary[0].Death, summary[0].Total, deathsJson, positiveJson))
 
 	err = ioutil.WriteFile("covid.html", bt, 0644)
 

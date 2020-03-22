@@ -16,6 +16,23 @@ func RegisterHandlers(s *services.Services) *Handlers {
 	}
 }
 
+func (h *Handlers) GenerateData(w http.ResponseWriter, r *http.Request) {
+	err = h.Services.Covid.GenerateNewDailyCasesData()
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("New data generated"))
+}
+
+func (h *Handlers) GenerateCovidPage() {
+
+}
+
 func (h *Handlers) SlackHandler(w http.ResponseWriter, r *http.Request) {
 	h.Services.Covid.GetDailyCasesUS()
 }

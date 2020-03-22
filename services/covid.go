@@ -1,9 +1,12 @@
 package services
 
 import (
+	"covid-us-api/file"
 	"covid-us-api/requests"
 	"encoding/json"
 	"fmt"
+	"log"
+	"time"
 )
 
 type Daily struct {
@@ -25,8 +28,74 @@ type Summary struct {
 	Total    int `json:"total"`
 }
 
+type DailyAll struct {
+	Daily       []Daily `json:"daily_data"`
+	LastUpdated string  `json:"last_updated"`
+}
+
 type Covid struct {
 	Request *requests.Request
+}
+
+func (c *Covid) GenerateNewDailyCasesData() error {
+	log.Println("Executing a new api call ..")
+	response, err := c.Request.NewGetRequest("/api/states/daily")
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	var dailyValues []Daily
+
+	err = json.Unmarshal(response, &dailyValues)
+
+	if err != nil {
+		return err
+	}
+
+	loc, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		return err
+
+	}
+
+	t := time.Now().In(loc)
+	lastUpdated := t.Format(time.RFC822)
+
+	d := DailyAll{
+		Daily:       dailyValues,
+		LastUpdated: lastUpdated,
+	}
+
+	dataToWrite, err := json.Marshal(&d)
+
+	if err != nil {
+		return err
+	}
+
+	return file.SaveFile("daily.json", "", dataToWrite)
+}
+
+func (c *Covid) GetDailyCasesUSRefactor() (DailyAll, error) {
+	readData, err := file.ReadFile("daily.json", "")
+	var dailyValues DailyAll
+
+	if err != nil {
+		log.Printf("Unable to open file : %s", err.Error())
+		err = c.GetAllDailyCases()
+		if err != nil {
+			return dailyValues, err
+		}
+	} else {
+		log.Println("File read successfully no external call needed")
+	}
+
+	err = json.Unmarshal(readData, &dailyValues)
+	if err != nil {
+		return dailyValues, err
+	}
+
+	return dailyValues, err
 }
 
 func (c *Covid) GetDailyCasesUS() ([]Daily, error) {

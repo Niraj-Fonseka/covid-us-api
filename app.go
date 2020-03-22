@@ -19,6 +19,8 @@ func main() {
 	http.HandleFunc("/drawstate", handlers.DrawGraphState)
 
 	http.HandleFunc("/test", handlers.DrawGraphUSMAP)
+
+	http.HandleFunc("/testrefactor", handlers.TestRefactor)
 	fmt.Println("Listening..")
 	http.ListenAndServe(":8080", nil)
 
