@@ -6,4 +6,5 @@ type PageFramework interface {
 	GenerateChart() string
 	BuildPage() error
 	GenerateStyle() string
+	GenerateBody() string
 }

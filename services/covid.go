@@ -82,7 +82,7 @@ func (c *Covid) GetDailyCasesUSRefactor() (DailyAll, error) {
 
 	if err != nil {
 		log.Printf("Unable to open file : %s", err.Error())
-		err = c.GetAllDailyCases()
+		err = c.GenerateNewDailyCasesData()
 		if err != nil {
 			return dailyValues, err
 		}

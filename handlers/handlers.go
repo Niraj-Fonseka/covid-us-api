@@ -8,16 +8,18 @@ import (
 
 type Handlers struct {
 	Services *services.Services
+	Pages    *services.Pages
 }
 
-func RegisterHandlers(s *services.Services) *Handlers {
+func RegisterHandlers(s *services.Services, p *services.Pages) *Handlers {
 	return &Handlers{
 		Services: s,
+		Pages:    p,
 	}
 }
 
 func (h *Handlers) GenerateData(w http.ResponseWriter, r *http.Request) {
-	err = h.Services.Covid.GenerateNewDailyCasesData()
+	err := h.Services.Covid.GenerateNewDailyCasesData()
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -30,46 +32,51 @@ func (h *Handlers) GenerateData(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GenerateCovidPage() {
+	dailyAll, err := h.Services.Covid.GetDailyCasesUSRefactor()
 
-}
-
-func (h *Handlers) SlackHandler(w http.ResponseWriter, r *http.Request) {
-	h.Services.Covid.GetDailyCasesUS()
-}
-
-func (h *Handlers) DrawGraph(w http.ResponseWriter, r *http.Request) {
-	response, err := h.Services.Covid.GetDailyCasesUS()
 	if err != nil {
-		log.Println(err)
-		return
-	}
-	h.Services.Graph.DrawDeathsGraph(response)
-}
-
-func (h *Handlers) DrawGraphUSMAP(w http.ResponseWriter, r *http.Request) {
-	response, err := h.Services.Covid.GetDailyCasesUS()
-	if err != nil {
-		log.Println(err)
-		return
+		log.Fatal(err)
 	}
 
-	summaryResponse, err := h.Services.Covid.GetUSSummary()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	h.Services.Graph.DrawUSMapGraph(response, summaryResponse)
 }
 
-func (h *Handlers) DrawGraphState(w http.ResponseWriter, r *http.Request) {
-	queryValues := r.URL.Query()
-	state := queryValues.Get("state")
-	response, err := h.Services.Covid.GetDailyCasesUSByState(state)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+// func (h *Handlers) SlackHandler(w http.ResponseWriter, r *http.Request) {
+// 	h.Services.Covid.GetDailyCasesUS()
+// }
 
-	h.Services.Graph.RenderStatePage(state, response)
-}
+// func (h *Handlers) DrawGraph(w http.ResponseWriter, r *http.Request) {
+// 	response, err := h.Services.Covid.GetDailyCasesUS()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return
+// 	}
+// 	h.Services.Graph.DrawDeathsGraph(response)
+// }
+
+// func (h *Handlers) DrawGraphUSMAP(w http.ResponseWriter, r *http.Request) {
+// 	response, err := h.Services.Covid.GetDailyCasesUS()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return
+// 	}
+
+// 	summaryResponse, err := h.Services.Covid.GetUSSummary()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return
+// 	}
+
+// 	h.Services.Graph.DrawUSMapGraph(response, summaryResponse)
+// }
+
+// func (h *Handlers) DrawGraphState(w http.ResponseWriter, r *http.Request) {
+// 	queryValues := r.URL.Query()
+// 	state := queryValues.Get("state")
+// 	response, err := h.Services.Covid.GetDailyCasesUSByState(state)
+// 	if err != nil {
+// 		log.Println(err)
+// 		return
+// 	}
+
+// 	h.Services.Graph.RenderStatePage(state, response)
+// }
