@@ -52,7 +52,7 @@ func (c *CovidPage) GenerateImports() string {
 	return imports
 }
 
-func (c *CovidPage) GenerateChart() string {
+func (c *CovidPage) GenerateChart(data ...string) string {
 
 	chart := `
 	<script>
