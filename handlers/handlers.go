@@ -31,12 +31,24 @@ func (h *Handlers) GenerateData(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("New data generated"))
 }
 
-func (h *Handlers) GenerateCovidPage() {
-	dailyAll, err := h.Services.Covid.GetDailyCasesUSRefactor()
+// func (h *Handlers) GenerateCovidPage() {
+// 	dailyAll, err := h.Services.Covid.GetDailyCasesUSRefactor()
 
-	if err != nil {
-		log.Fatal(err)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// }
+
+func (h *Handlers) RenderPage(w http.ResponseWriter, r *http.Request) {
+
+	pageParam := r.URL.Query().Get("page")
+	if pageParam == "" {
+		log.Println("rendering everything")
+	} else {
+		log.Printf("Rendering just this page : %s\n", pageParam)
 	}
+	h.Pages.RenderPages(pageParam)
 
 }
 

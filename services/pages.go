@@ -1,17 +1,36 @@
 package services
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 type Pages struct {
-	Pages map[string]PageFramework
+	Pages        map[string]PageFramework
+	CovidService *Covid
+	CacheService *Cache
 }
 
-func RegisterPages() *Pages {
-	return &Pages{
-		Pages: make(map[string]PageFramework),
+func NewPages(covidService *Covid) *Pages {
+	fmt.Println("creating pages covid service  : ", covidService)
+	cache := NewCache(covidService)
+	fmt.Println("creating cache : ", cache)
+	p := Pages{
+		Pages:        make(map[string]PageFramework),
+		CovidService: covidService,
+		CacheService: cache,
 	}
+
+	p.RegisterPages()
+	return &p
 }
 
+//Manually register each page
+func (p *Pages) RegisterPages() {
+	log.Println("Registering Pages..")
+	covidPage := CovidPage{}
+	p.RegisterNewPage("newcovid", &covidPage)
+}
 func (p *Pages) RegisterNewPage(pageName string, page PageFramework) {
 	p.Pages[pageName] = page
 }

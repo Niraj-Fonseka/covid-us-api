@@ -10,6 +10,12 @@ run:
 
 generate-new-data:
 	curl htto://localhost:8080/newdata
+
+rendertest:
+	curl http://localhost:8080/render
+
+renderquery:
+	curl http://localhost:8080/render?page=
 draw:
 	curl http://localhost:8080/draw
 

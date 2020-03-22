@@ -8,6 +8,7 @@ import (
 type Services struct {
 	Covid *Covid
 	Graph *Graph
+	Cache *Cache
 }
 
 func RegisterServices() *Services {
@@ -16,10 +17,15 @@ func RegisterServices() *Services {
 		BaseURL: "https://covidtracking.com",
 	}
 
+	covidService := &Covid{
+		Request: &request,
+	}
+	graphService := &Graph{}
+	cache := NewCache(covidService)
+
 	return &Services{
-		Covid: &Covid{
-			Request: &request,
-		},
-		Graph: &Graph{},
+		Covid: covidService,
+		Graph: graphService,
+		Cache: cache,
 	}
 }

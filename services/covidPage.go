@@ -2,10 +2,14 @@ package services
 
 import (
 	"covid-us-api/file"
+	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type CovidPage struct {
+	CovidService *Covid
+	CacheService *Cache
 }
 
 func (c *CovidPage) BuildPage() error {
@@ -13,11 +17,28 @@ func (c *CovidPage) BuildPage() error {
 	header := c.GenerateHeader()
 	imports := c.GenerateImports()
 	upperBody := c.GenerateBody()
-	chartScript := c.GenerateChart()
+	chartScript := c.GenerateChart("data")
 	styles := c.GenerateStyle()
 
+	dailyData, err := c.CacheService.GetDailyRecordsByDate(1)
+	if err != nil {
+		return err
+	}
+
+	summaryData, err := c.CacheService.GetOverallRecords()
+	if err != nil {
+		return err
+	}
+
+	generatedData, err := c.GenerateData(dailyData, summaryData)
+	if err != nil {
+		return err
+	}
+
+	bodyDataInjected := fmt.Sprintf(upperBody, dailyData.LastUpdated, generatedData["summaryPositive"], generatedData["summaryNegative"], generatedData["summaryPending"], generatedData["summaryDeaths"], generatedData["total"])
+	chartScriptDataInjected := fmt.Sprintf(chartScript)
 	//imports , style , upper body , bodyscript
-	page := fmt.Sprintf(header, imports, styles, upperBody, chartScript)
+	page := fmt.Sprintf(header, imports, styles, bodyDataInjected, chartScriptDataInjected)
 
 	return file.SaveFile("newcovid.html", "", []byte(page))
 }
@@ -36,6 +57,100 @@ func (c *CovidPage) GenerateHeader() string {
 	`
 
 	return header
+}
+
+func (c *CovidPage) GenerateData(data DailyAll, summary SummaryAll) (map[string]interface{}, error) {
+
+	type StateDatapoint struct {
+		Value float64 `json:"value"`
+		Code  string  `json:"code"`
+	}
+
+	var deaths []StateDatapoint
+	var positive []StateDatapoint
+	var negative []StateDatapoint
+	var pending []StateDatapoint
+	var total []StateDatapoint
+
+	for _, v := range data.Daily {
+
+		date := data.Daily[0].Date
+
+		if v.Date != date {
+			break
+		}
+
+		var deathVal float64
+		if v.Death == 0 {
+			deathVal = 0.00001
+		} else {
+			deathVal = float64(v.Death)
+		}
+
+		deaths = append(deaths, StateDatapoint{Value: deathVal, Code: v.State})
+
+		var posVal float64
+		if v.Positive == 0 {
+			posVal = 0.00001
+		} else {
+			posVal = float64(v.Positive)
+		}
+
+		positive = append(positive, StateDatapoint{Value: posVal, Code: v.State})
+
+		var negVal float64
+		if v.Death == 0 {
+			negVal = 0.00001
+		} else {
+			negVal = float64(v.Negative)
+		}
+
+		negative = append(negative, StateDatapoint{Value: negVal, Code: v.State})
+
+		var penVal float64
+		if v.Pending == 0 {
+			penVal = 0.00001
+		} else {
+			penVal = float64(v.Pending)
+		}
+
+		pending = append(pending, StateDatapoint{Value: penVal, Code: v.State})
+
+		var totalVal float64
+		if v.Total == 0 {
+			totalVal = 0.00001
+		} else {
+			totalVal = float64(v.Total)
+		}
+
+		total = append(total, StateDatapoint{Value: totalVal, Code: strings.ToLower(v.State)})
+
+	}
+
+	deathsJson, err := json.Marshal(&deaths)
+	if err != nil {
+		return nil, err
+	}
+	positiveJson, err := json.Marshal(&positive)
+	if err != nil {
+		return nil, err
+	}
+
+	lastUpdatedTime := LastUpdated()
+
+	dataStore := make(map[string]interface{})
+
+	dataStore["deathsJSON"] = deathsJson
+	dataStore["positiveJSON"] = positiveJson
+	dataStore["lastUpdated"] = []byte(lastUpdatedTime)
+	dataStore["summaryDeaths"] = summary.Summary[0].Death
+	dataStore["summaryPositive"] = summary.Summary[0].Positive
+	dataStore["summaryPending"] = summary.Summary[0].Pending
+	dataStore["summaryNegative"] = summary.Summary[0].Negative
+	dataStore["total"] = summary.Summary[0].Total
+
+	return dataStore, nil
+
 }
 
 func (c *CovidPage) GenerateImports() string {

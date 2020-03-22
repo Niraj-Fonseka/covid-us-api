@@ -1005,7 +1005,13 @@ func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
 		</body>
 	`
 
-	bt := []byte(fmt.Sprintf(str, lastUpdated, summary[0].Positive, summary[0].Negative, summary[0].Pending, summary[0].Death, summary[0].Total, deathsJson, positiveJson))
+	bt := []byte(fmt.Sprintf(str,
+		lastUpdated,
+		summary[0].Positive,
+		summary[0].Negative,
+		summary[0].Pending,
+		summary[0].Death,
+		summary[0].Total, deathsJson, positiveJson))
 
 	err = ioutil.WriteFile("covid.html", bt, 0644)
 

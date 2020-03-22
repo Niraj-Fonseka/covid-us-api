@@ -33,11 +33,55 @@ type DailyAll struct {
 	LastUpdated string  `json:"last_updated"`
 }
 
+type SummaryAll struct {
+	Summary     []Summary `json:"summary"`
+	LastUpdated string    `json:"last_updated"`
+}
+
 type Covid struct {
 	Request *requests.Request
 }
 
 func (c *Covid) GenerateNewDailyCasesData() error {
+	log.Println("Executing a new api call ..")
+	response, err := c.Request.NewGetRequest("/api/states/daily")
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	var dailyValues []Daily
+
+	err = json.Unmarshal(response, &dailyValues)
+
+	if err != nil {
+		return err
+	}
+
+	loc, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		return err
+
+	}
+
+	t := time.Now().In(loc)
+	lastUpdated := t.Format(time.RFC822)
+
+	d := DailyAll{
+		Daily:       dailyValues,
+		LastUpdated: lastUpdated,
+	}
+
+	dataToWrite, err := json.Marshal(&d)
+
+	if err != nil {
+		return err
+	}
+
+	return file.SaveFile("daily.json", "", dataToWrite)
+}
+
+func (c *Covid) GenerateNewOverallCasesData() error {
 	log.Println("Executing a new api call ..")
 	response, err := c.Request.NewGetRequest("/api/states/daily")
 
@@ -96,6 +140,28 @@ func (c *Covid) GetDailyCasesUSRefactor() (DailyAll, error) {
 	}
 
 	return dailyValues, err
+}
+func (c *Covid) GetSummaryCasesUSRefactor() (SummaryAll, error) {
+	readData, err := file.ReadFile("summary.json", "")
+
+	var overallValues SummaryAll
+
+	if err != nil {
+		log.Printf("Unable to open file : %s", err.Error())
+		err = c.GenerateNewDailyCasesData()
+		if err != nil {
+			return overallValues, err
+		}
+	} else {
+		log.Println("File read successfully no external call needed")
+	}
+
+	err = json.Unmarshal(readData, &overallValues)
+	if err != nil {
+		return overallValues, err
+	}
+
+	return overallValues, err
 }
 
 func (c *Covid) GetDailyCasesUS() ([]Daily, error) {
