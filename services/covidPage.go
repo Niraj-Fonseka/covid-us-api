@@ -21,22 +21,27 @@ func (c *CovidPage) BuildPage() error {
 	styles := c.GenerateStyle()
 
 	dailyData, err := c.CacheService.GetDailyRecordsByDate(1)
+	fmt.Println("GetDailyRecordsByDate", err)
 	if err != nil {
 		return err
 	}
 
 	summaryData, err := c.CacheService.GetOverallRecords()
+	fmt.Println("GetOverallRecords", err)
+
 	if err != nil {
 		return err
 	}
 
 	generatedData, err := c.GenerateData(dailyData, summaryData)
+	fmt.Println("GenerateData", err)
+
 	if err != nil {
 		return err
 	}
 
 	bodyDataInjected := fmt.Sprintf(upperBody, dailyData.LastUpdated, generatedData["summaryPositive"], generatedData["summaryNegative"], generatedData["summaryPending"], generatedData["summaryDeaths"], generatedData["total"])
-	chartScriptDataInjected := fmt.Sprintf(chartScript)
+	chartScriptDataInjected := fmt.Sprintf(chartScript, generatedData["deathsJSON"], generatedData["positiveJSON"])
 	//imports , style , upper body , bodyscript
 	page := fmt.Sprintf(header, imports, styles, bodyDataInjected, chartScriptDataInjected)
 

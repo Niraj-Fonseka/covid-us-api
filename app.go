@@ -12,10 +12,12 @@ func main() {
 
 	log.Println("Starting server ...")
 	svcs := services.RegisterServices()
-	pages := services.NewPages(svcs.Covid)
+	pages := services.NewPages(svcs)
 	handlers := handlers.RegisterHandlers(svcs, pages)
 
 	http.HandleFunc("/render", handlers.RenderPage)
+	http.HandleFunc("/generate-daily", handlers.GenerateDailyData)
+	http.HandleFunc("/generate-summary", handlers.GenerateSummaryData)
 	// http.HandleFunc("/daily", handlers.SlackHandler)
 	// http.HandleFunc("/draw", handlers.DrawGraph)
 	// http.HandleFunc("/drawstate", handlers.DrawGraphState)

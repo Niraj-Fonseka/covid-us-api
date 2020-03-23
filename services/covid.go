@@ -82,14 +82,15 @@ func (c *Covid) GenerateNewDailyCasesData() error {
 }
 
 func (c *Covid) GenerateNewOverallCasesData() error {
-	log.Println("Executing a new api call ..")
-	response, err := c.Request.NewGetRequest("/api/states/daily")
+	log.Println("Executing a new api call ..overall")
+	response, err := c.Request.NewGetRequest("/api/us")
 
 	if err != nil {
 		log.Println(err)
 	}
 
-	var dailyValues []Daily
+	fmt.Println(string(response))
+	var dailyValues []Summary
 
 	err = json.Unmarshal(response, &dailyValues)
 
@@ -106,8 +107,8 @@ func (c *Covid) GenerateNewOverallCasesData() error {
 	t := time.Now().In(loc)
 	lastUpdated := t.Format(time.RFC822)
 
-	d := DailyAll{
-		Daily:       dailyValues,
+	d := SummaryAll{
+		Summary:     dailyValues,
 		LastUpdated: lastUpdated,
 	}
 
@@ -117,7 +118,7 @@ func (c *Covid) GenerateNewOverallCasesData() error {
 		return err
 	}
 
-	return file.SaveFile("daily.json", "", dataToWrite)
+	return file.SaveFile("summary.json", "", dataToWrite)
 }
 
 func (c *Covid) GetDailyCasesUSRefactor() (DailyAll, error) {
@@ -148,7 +149,7 @@ func (c *Covid) GetSummaryCasesUSRefactor() (SummaryAll, error) {
 
 	if err != nil {
 		log.Printf("Unable to open file : %s", err.Error())
-		err = c.GenerateNewDailyCasesData()
+		err = c.GenerateNewOverallCasesData()
 		if err != nil {
 			return overallValues, err
 		}

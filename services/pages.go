@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -11,14 +10,12 @@ type Pages struct {
 	CacheService *Cache
 }
 
-func NewPages(covidService *Covid) *Pages {
-	fmt.Println("creating pages covid service  : ", covidService)
-	cache := NewCache(covidService)
-	fmt.Println("creating cache : ", cache)
+func NewPages(svcs *Services) *Pages {
+
 	p := Pages{
 		Pages:        make(map[string]PageFramework),
-		CovidService: covidService,
-		CacheService: cache,
+		CovidService: svcs.Covid,
+		CacheService: svcs.Cache,
 	}
 
 	p.RegisterPages()
@@ -28,7 +25,7 @@ func NewPages(covidService *Covid) *Pages {
 //Manually register each page
 func (p *Pages) RegisterPages() {
 	log.Println("Registering Pages..")
-	covidPage := CovidPage{}
+	covidPage := CovidPage{p.CovidService, p.CacheService}
 	p.RegisterNewPage("newcovid", &covidPage)
 }
 func (p *Pages) RegisterNewPage(pageName string, page PageFramework) {
@@ -37,6 +34,7 @@ func (p *Pages) RegisterNewPage(pageName string, page PageFramework) {
 
 func (p *Pages) RenderPages(pageName string) {
 	if pageName == "" {
+
 		//render everything
 		for _, p := range p.Pages {
 			err := p.BuildPage()
