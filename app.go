@@ -11,14 +11,16 @@ import (
 func main() {
 
 	log.Println("Starting server ...")
-	services := services.RegisterServices()
-	handlers := handlers.RegisterHandlers(services)
+	svcs := services.RegisterServices()
+	pages := services.NewPages(svcs)
+	handlers := handlers.RegisterHandlers(svcs, pages)
 
-	http.HandleFunc("/daily", handlers.SlackHandler)
-	http.HandleFunc("/draw", handlers.DrawGraph)
-	http.HandleFunc("/drawstate", handlers.DrawGraphState)
+	http.HandleFunc("/render", handlers.RenderPage)
+	http.HandleFunc("/generate-daily", handlers.GenerateDailyData)
+	http.HandleFunc("/generate-summary", handlers.GenerateSummaryData)
+	http.HandleFunc("/upload-mainpage", handlers.UploadMainPage)
+	http.HandleFunc("/upload-statespages", handlers.UploadStatePages)
 
-	http.HandleFunc("/test", handlers.DrawGraphUSMAP)
 	fmt.Println("Listening..")
 	http.ListenAndServe(":8080", nil)
 

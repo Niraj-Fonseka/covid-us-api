@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -38,7 +39,8 @@ func (s *S3Manager) UploadFile(bucket string, filename string) {
 	})
 	if err != nil {
 		// Print the error and exit.
-		exitErrorf("Unable to upload %q to %q, %v", filename, bucket, err)
+		log.Printf("Unable to upload %q to %q, %v", filename, bucket, err)
+		return
 	}
 
 	fmt.Printf("Successfully uploaded %q to %q\n", filename, bucket)
