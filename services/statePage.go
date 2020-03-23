@@ -35,7 +35,7 @@ func (c *StatePage) BuildPage() error {
 		}
 		bodyDataInjected := fmt.Sprintf(upperBody, state, normalizedData["lastUpdated"])
 		chartScriptDataInjected := fmt.Sprintf(chartScript, "'%y-%m-%e'", normalizedData["deathsArray"], "'%y-%m-%e'", normalizedData["positiveArray"])
-		page := fmt.Sprintf(header, imports, styles, bodyDataInjected, chartScriptDataInjected)
+		page := fmt.Sprintf(header, imports, styles, bodyDataInjected+chartScriptDataInjected)
 		fileName := fmt.Sprintf("%s.html", state)
 		err = file.SaveFile(fileName, "states", []byte(page))
 		if err != nil {
@@ -297,7 +297,7 @@ func (c *StatePage) GenerateStyle() string {
 		text-align: center;
 		color: #E0E0E3;
 	}
-	
+
 	#state-title{
 		text-align: center;
 		color: #E0E0E3;

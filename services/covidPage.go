@@ -43,7 +43,7 @@ func (c *CovidPage) BuildPage() error {
 	bodyDataInjected := fmt.Sprintf(upperBody, dailyData.LastUpdated, generatedData["summaryPositive"], generatedData["summaryNegative"], generatedData["summaryHospitalized"], generatedData["summaryDeaths"], generatedData["total"])
 	chartScriptDataInjected := fmt.Sprintf(chartScript, generatedData["deathsJSON"], generatedData["positiveJSON"])
 	//imports , style , upper body , bodyscript
-	page := fmt.Sprintf(header, imports, styles, bodyDataInjected, chartScriptDataInjected)
+	page := fmt.Sprintf(header, imports, styles, bodyDataInjected+chartScriptDataInjected)
 
 	return file.SaveFile("covid.html", "", []byte(page))
 }
