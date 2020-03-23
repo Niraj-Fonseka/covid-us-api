@@ -28,12 +28,12 @@ func (c *StatePage) BuildPage() error {
 	}
 
 	for state, stateValues := range generatedData.StateData {
-		normalizedData, err := c.GenerateData(stateValues)
+		normalizedData, err := c.GenerateData(stateValues, generatedData.LastUpdated)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		bodyDataInjected := fmt.Sprintf(upperBody, state)
+		bodyDataInjected := fmt.Sprintf(upperBody, state, normalizedData["lastUpdated"])
 		chartScriptDataInjected := fmt.Sprintf(chartScript, "'%y-%m-%e'", normalizedData["deathsArray"], "'%y-%m-%e'", normalizedData["positiveArray"])
 		page := fmt.Sprintf(header, imports, styles, bodyDataInjected, chartScriptDataInjected)
 		fileName := fmt.Sprintf("%s.html", state)
@@ -50,7 +50,7 @@ func (c *StatePage) BuildPage() error {
 	return nil
 }
 
-func (c *StatePage) GenerateData(daily []Daily) (map[string]interface{}, error) {
+func (c *StatePage) GenerateData(daily []Daily, lastUpdated string) (map[string]interface{}, error) {
 
 	var dates string
 	var y1 string
@@ -80,6 +80,7 @@ func (c *StatePage) GenerateData(daily []Daily) (map[string]interface{}, error) 
 	dataStore["deathsArray"] = y1
 	dataStore["positiveArray"] = y2
 	dataStore["datesArray"] = dates
+	dataStore["lastUpdated"] = lastUpdated
 
 	return dataStore, nil
 }
@@ -205,8 +206,12 @@ func (c *StatePage) GenerateChart(data ...string) string {
 func (c *StatePage) GenerateBody() string {
 
 	body := `
-	<div id="state-title">
+		<div id="state-title">
 			<h1> Currently viewing data for : %s</h1>
+		</div>
+
+		<div id="date-title">
+			<h1> Last updated : %s</h1>
 		</div>
 
 
@@ -287,6 +292,12 @@ func (c *StatePage) GenerateBody() string {
 
 func (c *StatePage) GenerateStyle() string {
 	styles := `<style>
+
+	#date-title{
+		text-align: center;
+		color: #E0E0E3;
+	}
+	
 	#state-title{
 		text-align: center;
 		color: #E0E0E3;
