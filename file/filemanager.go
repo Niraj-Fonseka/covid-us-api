@@ -30,5 +30,5 @@ func buildFilePath(filename, path string) string {
 	if path == "" {
 		return filename
 	}
-	return fmt.Sprintf("%s/%s", filename, path)
+	return fmt.Sprintf("%s/%s", path, filename)
 }

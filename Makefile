@@ -8,23 +8,15 @@ run:
 	./covid
 
 
-generate-new-data:
-	curl htto://localhost:8080/newdata
 
-rendertest:
+render:
 	curl http://localhost:8080/render
 
-renderquery:
-	curl http://localhost:8080/render?page=
-draw:
-	curl http://localhost:8080/draw
+generate-daily:
+	curl http://localhost:8080/generate-daily
 
-test:
-	curl http://localhost:8080/test
-
-testrefactor:
-	curl http://localhost:8080/testrefactor
-
+generate-summary:
+	curl http://localhost:8080/generate-summary
 
 generate-all: 
 	curl http://localhost:8080/generate-daily
@@ -32,3 +24,10 @@ generate-all:
 
 upload-mainpage:
 	curl http://localhost:8080/upload-mainpage
+
+upload-statepages:
+	curl http://localhost:8080/upload-statespages
+
+upload-all: upload-mainpage upload-statepages
+
+run-all: generate-all render upload-all

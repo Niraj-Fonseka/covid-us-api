@@ -7,7 +7,6 @@ import (
 
 type Services struct {
 	Covid *Covid
-	Graph *Graph
 	Cache *Cache
 }
 
@@ -20,12 +19,10 @@ func RegisterServices() *Services {
 	covidService := &Covid{
 		Request: &request,
 	}
-	graphService := &Graph{}
 	cache := NewCache(covidService)
 
 	return &Services{
 		Covid: covidService,
-		Graph: graphService,
 		Cache: cache,
 	}
 }

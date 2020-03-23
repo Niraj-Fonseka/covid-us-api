@@ -21,8 +21,8 @@ func (c *Cache) GetDailyRecordsByDate(date int) (DailyAll, error) {
 
 }
 
-func (c *Cache) GetDailyRecordsByState(state string) {
-
+func (c *Cache) GetDailyStateRecords() (StateAll, error) {
+	return c.CovidService.GetDailyStateDataRefactor()
 }
 
 func (c *Cache) CreateOverallRecords(filename string) {

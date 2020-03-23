@@ -19,13 +19,8 @@ func main() {
 	http.HandleFunc("/generate-daily", handlers.GenerateDailyData)
 	http.HandleFunc("/generate-summary", handlers.GenerateSummaryData)
 	http.HandleFunc("/upload-mainpage", handlers.UploadMainPage)
-	// http.HandleFunc("/daily", handlers.SlackHandler)
-	// http.HandleFunc("/draw", handlers.DrawGraph)
-	// http.HandleFunc("/drawstate", handlers.DrawGraphState)
+	http.HandleFunc("/upload-statespages", handlers.UploadStatePages)
 
-	// http.HandleFunc("/test", handlers.DrawGraphUSMAP)
-
-	// http.HandleFunc("/testrefactor", handlers.TestRefactor)
 	fmt.Println("Listening..")
 	http.ListenAndServe(":8080", nil)
 

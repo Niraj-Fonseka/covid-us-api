@@ -5,6 +5,7 @@ import (
 	"covid-us-api/requests"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"time"
 )
@@ -38,6 +39,10 @@ type SummaryAll struct {
 	LastUpdated string    `json:"last_updated"`
 }
 
+type StateAll struct {
+	StateData   map[string][]Daily `json:"state_data"`
+	LastUpdated string             `json:"last_updated"`
+}
 type Covid struct {
 	Request *requests.Request
 }
@@ -47,6 +52,18 @@ func (c *Covid) UploadMainPage() {
 	var s3Manageer S3Manager
 
 	s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
+}
+
+func (c *Covid) UploadAllStateFiles() {
+	files, err := ioutil.ReadDir("./states")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, f := range files {
+		var s3Manageer S3Manager
+		fullPath := fmt.Sprintf("%s/%s", "states", f.Name())
+		s3Manageer.UploadFile("covid-19-us-dataset", fullPath)
+	}
 }
 
 func (c *Covid) GenerateNewDailyCasesData() error {
@@ -71,6 +88,10 @@ func (c *Covid) GenerateNewDailyCasesData() error {
 
 	}
 
+	err = c.GenerateStateData(dailyValues)
+	if err != nil {
+		return err
+	}
 	t := time.Now().In(loc)
 	lastUpdated := t.Format(time.RFC822)
 
@@ -88,6 +109,35 @@ func (c *Covid) GenerateNewDailyCasesData() error {
 	return file.SaveFile("daily.json", "", dataToWrite)
 }
 
+func (c *Covid) GenerateStateData(dailyValues []Daily) error {
+	stateData := make(map[string][]Daily)
+
+	for _, d := range dailyValues {
+		stateData[d.State] = append(stateData[d.State], d)
+	}
+
+	loc, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		return err
+
+	}
+
+	t := time.Now().In(loc)
+	lastUpdated := t.Format(time.RFC822)
+
+	stateAll := StateAll{
+		StateData:   stateData,
+		LastUpdated: lastUpdated,
+	}
+
+	dataToWrite, err := json.Marshal(&stateAll)
+
+	if err != nil {
+		return err
+	}
+
+	return file.SaveFile("stateData.json", "", dataToWrite)
+}
 func (c *Covid) GenerateNewOverallCasesData() error {
 	log.Println("Executing a new api call ..overall")
 	response, err := c.Request.NewGetRequest("/api/us")
@@ -148,6 +198,28 @@ func (c *Covid) GetDailyCasesUSRefactor() (DailyAll, error) {
 	}
 
 	return dailyValues, err
+}
+
+func (c *Covid) GetDailyStateDataRefactor() (StateAll, error) {
+	readData, err := file.ReadFile("stateData.json", "")
+	var stateDailyValues StateAll
+
+	if err != nil {
+		log.Printf("Unable to open file : %s", err.Error())
+		err = c.GenerateNewDailyCasesData()
+		if err != nil {
+			return stateDailyValues, err
+		}
+	} else {
+		log.Println("File read successfully no external call needed")
+	}
+
+	err = json.Unmarshal(readData, &stateDailyValues)
+	if err != nil {
+		return stateDailyValues, err
+	}
+
+	return stateDailyValues, err
 }
 func (c *Covid) GetSummaryCasesUSRefactor() (SummaryAll, error) {
 	readData, err := file.ReadFile("summary.json", "")

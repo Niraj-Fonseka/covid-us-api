@@ -1,56 +1,56 @@
 <!DOCTYPE html>
-		<head>
-		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="https://code.highcharts.com/highcharts.js"></script>
-		<script src="https://code.highcharts.com/modules/exporting.js"></script>
-		<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<head>
+	
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	
+	</head>
 
-		</head>
-		<style>
-			#state-title{
-				text-align: center;
-				color: #E0E0E3;
-			}
+	<body style="background-color:#2A2D34;">
+	<style>
+	#state-title{
+		text-align: center;
+		color: #E0E0E3;
+	}
 
-			#dropdown{
-				background-color:gainsboro;
-				width: 120px;
-				height: 30px;
-				display: block;
-				font-size: 15px;
-				border: none;
-				margin: 0 auto;
-				border-radius: 5px;
-			}
+	#dropdown{
+		background-color:gainsboro;
+		width: 120px;
+		height: 30px;
+		display: block;
+		font-size: 15px;
+		border: none;
+		margin: 0 auto;
+		border-radius: 5px;
+	}
 
 
-			#goback{
-				border-radius: 5px;
-				width: 50px;
-				height: 30px;
-				border: none;
-				font-size: 15px;
-				background-color: gainsboro;
-				display: block;
-				padding-left: 10px;
-				padding-top: 10px;
-				margin: 0 auto;
-			}
+	#goback{
+		border-radius: 5px;
+		width: 50px;
+		height: 30px;
+		border: none;
+		font-size: 15px;
+		background-color: gainsboro;
+		display: block;
+		padding-left: 10px;
+		padding-top: 10px;
+		margin: 0 auto;
+	}
 
-			#gobackwrapper{
-				padding: 10px;
-			}
+	#gobackwrapper{
+		padding: 10px;
+	}
 
-			#dropdownwrapper{
-				padding: 10px;
-			}
-		</style>
-		
-		<body style="background-color:#2A2D34;">
-
-		
-
-		<div id="state-title">
+	#dropdownwrapper{
+		padding: 10px;
+	}
+</style>
+	
+	
+	<div id="state-title">
 			<h1> Currently viewing data for : NE</h1>
 		</div>
 
@@ -126,91 +126,92 @@
 		
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
-		<script>
-
-		$('#dropdown').change(function(){
-			var value = $(this).children("option:selected").val();
-			location.href = value+'.html'
-		});
-
-		$('#goback').click(function(){
-			location.href = 'https://covid-19-us-dataset.s3.amazonaws.com/covid.html'
-		});
 	
-		$(function () {
-			$('#state-trending-deaths').highcharts( {
+	</body>
+	%!(EXTRA string=
+	<script>
+
+	$('#dropdown').change(function(){
+		var value = $(this).children("option:selected").val();
+		location.href = value+'.html'
+	});
+
+	$('#goback').click(function(){
+		location.href = 'https://covid-19-us-dataset.s3.amazonaws.com/covid.html'
+	});
+
+	$(function () {
+		$('#state-trending-deaths').highcharts( {
+			title:{
+				text : 'Deaths Trending'
+			},
+			chart: {
+				type: 'line',
+				backgroundColor: '#2A2D34'
+			},
+			xAxis: {
+				type: 'datetime',
+				dateTimeLabelFormats: {
+					day: '%y-%m-%e'
+				},
 				title:{
-					text : 'Deaths Trending'
+					text: 'dates'
 				},
-				chart: {
-					type: 'line',
-					backgroundColor: '#2A2D34'
-				},
-				xAxis: {
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						day: '%y-%m-%e'
+			},
+		
+			plotOptions: {
+				line: {
+					dataLabels: {
+						enabled: true
 					},
-					title:{
-						text: 'dates'
-					},
+				enableMouseTracking: false
 				},
-			
-				plotOptions: {
-					line: {
-            			dataLabels: {
-                			enabled: true
-            			},
-            		enableMouseTracking: false
-					},
-					
-					series: {
-						fillOpacity: 0.1
-					}
+				
+				series: {
+					fillOpacity: 0.1
+				}
+			},
+		
+			series: [{
+				name: "deaths",
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),0],[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),0],[Date.UTC(2020, 2, 21),0],[Date.UTC(2020, 2, 22),0]]
+			}]
+		});
+		$('#state-trending-positive').highcharts( {
+			title:{
+				text : 'Positive Trending'
+			},
+			chart: {
+				type: 'line',
+				backgroundColor: '#2A2D34'
+			},
+			xAxis: {
+				type: 'datetime',
+				dateTimeLabelFormats: {
+					day: '%y-%m-%e'
 				},
-			
-				series: [{
-					name: "deaths",
-					data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),0],[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),0]]
-				}]
-			});
-			$('#state-trending-positive').highcharts( {
 				title:{
-					text : 'Positive Trending'
+					text: 'dates'
 				},
-				chart: {
-					type: 'line',
-					backgroundColor: '#2A2D34'
-				},
-				xAxis: {
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						day: '%y-%m-%e'
+			},
+		
+			plotOptions: {
+				line: {
+					dataLabels: {
+						enabled: true
 					},
-					title:{
-						text: 'dates'
-					},
+				enableMouseTracking: false
 				},
-			
-				plotOptions: {
-					line: {
-            			dataLabels: {
-                			enabled: true
-            			},
-            		enableMouseTracking: false
-        			},
-					
-					series: {
-						fillOpacity: 0.1
-					}
-				},
-			
-				series: [{
-					name: "positive",
-					data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),1],[Date.UTC(2020, 2, 08),1],[Date.UTC(2020, 2, 09),3],[Date.UTC(2020, 2, 10),3],[Date.UTC(2020, 2, 11),5],[Date.UTC(2020, 2, 12),10],[Date.UTC(2020, 2, 13),13],[Date.UTC(2020, 2, 14),14],[Date.UTC(2020, 2, 15),17],[Date.UTC(2020, 2, 16),18],[Date.UTC(2020, 2, 17),21],[Date.UTC(2020, 2, 18),24],[Date.UTC(2020, 2, 19),27],[Date.UTC(2020, 2, 20),32]]
-				}]
-			});
-			});
-		</script>
-		</body>
-	
+				
+				series: {
+					fillOpacity: 0.1
+				}
+			},
+		
+			series: [{
+				name: "positive",
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),1],[Date.UTC(2020, 2, 08),1],[Date.UTC(2020, 2, 09),3],[Date.UTC(2020, 2, 10),3],[Date.UTC(2020, 2, 11),5],[Date.UTC(2020, 2, 12),10],[Date.UTC(2020, 2, 13),13],[Date.UTC(2020, 2, 14),14],[Date.UTC(2020, 2, 15),17],[Date.UTC(2020, 2, 16),18],[Date.UTC(2020, 2, 17),21],[Date.UTC(2020, 2, 18),24],[Date.UTC(2020, 2, 19),27],[Date.UTC(2020, 2, 20),32],[Date.UTC(2020, 2, 21),38],[Date.UTC(2020, 2, 22),48]]
+			}]
+		});
+		});
+	</script>)

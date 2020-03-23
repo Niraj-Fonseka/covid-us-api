@@ -48,6 +48,9 @@ func (h *Handlers) UploadMainPage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Uploading main page")
 	h.Services.Covid.UploadMainPage()
 }
+func (h *Handlers) UploadStatePages(w http.ResponseWriter, r *http.Request) {
+	h.Services.Covid.UploadAllStateFiles()
+}
 
 func (h *Handlers) RenderPage(w http.ResponseWriter, r *http.Request) {
 
