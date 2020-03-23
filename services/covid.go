@@ -20,12 +20,12 @@ type Daily struct {
 }
 
 type Summary struct {
-	Positive int `json:"positive"`
-	Negative int `json:"negative"`
-	PosNeg   int `json:"posNeg"`
-	Pending  int `json:"pending"`
-	Death    int `json:"death"`
-	Total    int `json:"total"`
+	Positive     int `json:"positive"`
+	Negative     int `json:"negative"`
+	PosNeg       int `json:"posNeg"`
+	Hospitalized int `json:"hospitalized"`
+	Death        int `json:"death"`
+	Total        int `json:"total"`
 }
 
 type DailyAll struct {
@@ -42,12 +42,19 @@ type Covid struct {
 	Request *requests.Request
 }
 
+func (c *Covid) UploadMainPage() {
+
+	var s3Manageer S3Manager
+
+	s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
+}
+
 func (c *Covid) GenerateNewDailyCasesData() error {
 	log.Println("Executing a new api call ..")
 	response, err := c.Request.NewGetRequest("/api/states/daily")
 
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 
 	var dailyValues []Daily

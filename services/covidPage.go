@@ -40,12 +40,12 @@ func (c *CovidPage) BuildPage() error {
 		return err
 	}
 
-	bodyDataInjected := fmt.Sprintf(upperBody, dailyData.LastUpdated, generatedData["summaryPositive"], generatedData["summaryNegative"], generatedData["summaryPending"], generatedData["summaryDeaths"], generatedData["total"])
+	bodyDataInjected := fmt.Sprintf(upperBody, dailyData.LastUpdated, generatedData["summaryPositive"], generatedData["summaryNegative"], generatedData["summaryHospitalized"], generatedData["summaryDeaths"], generatedData["total"])
 	chartScriptDataInjected := fmt.Sprintf(chartScript, generatedData["deathsJSON"], generatedData["positiveJSON"])
 	//imports , style , upper body , bodyscript
 	page := fmt.Sprintf(header, imports, styles, bodyDataInjected, chartScriptDataInjected)
 
-	return file.SaveFile("newcovid.html", "", []byte(page))
+	return file.SaveFile("covid.html", "", []byte(page))
 }
 
 func (c *CovidPage) GenerateHeader() string {
@@ -150,7 +150,7 @@ func (c *CovidPage) GenerateData(data DailyAll, summary SummaryAll) (map[string]
 	dataStore["lastUpdated"] = []byte(lastUpdatedTime)
 	dataStore["summaryDeaths"] = summary.Summary[0].Death
 	dataStore["summaryPositive"] = summary.Summary[0].Positive
-	dataStore["summaryPending"] = summary.Summary[0].Pending
+	dataStore["summaryHospitalized"] = summary.Summary[0].Hospitalized
 	dataStore["summaryNegative"] = summary.Summary[0].Negative
 	dataStore["total"] = summary.Summary[0].Total
 
@@ -406,7 +406,7 @@ func (c *CovidPage) GenerateBody() string {
 
 		<div id="positive">
 			<div id="category">
-				Pending
+				Hospitalized
 			</div>
 			<div id="number">
 				%d

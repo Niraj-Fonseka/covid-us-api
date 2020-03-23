@@ -32,7 +32,7 @@ func (h *Handlers) GenerateDailyData(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GenerateSummaryData(w http.ResponseWriter, r *http.Request) {
-	err := h.Services.Covid.GenerateNewDailyCasesData()
+	err := h.Services.Covid.GenerateNewOverallCasesData()
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -44,14 +44,10 @@ func (h *Handlers) GenerateSummaryData(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("New data generated"))
 }
 
-// func (h *Handlers) GenerateCovidPage() {
-// 	dailyAll, err := h.Services.Covid.GetDailyCasesUSRefactor()
-
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// }
+func (h *Handlers) UploadMainPage(w http.ResponseWriter, r *http.Request) {
+	log.Println("Uploading main page")
+	h.Services.Covid.UploadMainPage()
+}
 
 func (h *Handlers) RenderPage(w http.ResponseWriter, r *http.Request) {
 

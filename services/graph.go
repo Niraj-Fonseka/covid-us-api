@@ -1009,7 +1009,7 @@ func (g *Graph) DrawUSMapGraph(data []Daily, summary []Summary) {
 		lastUpdated,
 		summary[0].Positive,
 		summary[0].Negative,
-		summary[0].Pending,
+		summary[0].Hospitalized,
 		summary[0].Death,
 		summary[0].Total, deathsJson, positiveJson))
 

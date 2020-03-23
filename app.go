@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/render", handlers.RenderPage)
 	http.HandleFunc("/generate-daily", handlers.GenerateDailyData)
 	http.HandleFunc("/generate-summary", handlers.GenerateSummaryData)
+	http.HandleFunc("/upload-mainpage", handlers.UploadMainPage)
 	// http.HandleFunc("/daily", handlers.SlackHandler)
 	// http.HandleFunc("/draw", handlers.DrawGraph)
 	// http.HandleFunc("/drawstate", handlers.DrawGraphState)

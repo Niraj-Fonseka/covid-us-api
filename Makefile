@@ -24,3 +24,11 @@ test:
 
 testrefactor:
 	curl http://localhost:8080/testrefactor
+
+
+generate-all: 
+	curl http://localhost:8080/generate-daily
+	curl http://localhost:8080/generate-summary
+
+upload-mainpage:
+	curl http://localhost:8080/upload-mainpage
