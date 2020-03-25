@@ -48,6 +48,7 @@ func (c *CountyPage) GenerateData(countyData USCountyAll) (map[string]interface{
 	dataStore["deathsData"] = deathsJSON
 	dataStore["confirmedData"] = confirmedJSON
 
+	return dataStore, nil
 }
 
 func generateStateCode(state, code string) string {
@@ -59,4 +60,18 @@ func generateStateCode(state, code string) string {
 
 func generateCountyName(county, state string) string {
 	return fmt.Sprintf("%s , %s", strings.TrimSpace(county), strings.TrimSpace(state))
+}
+
+func (c *CountyPage) GenerateImports() string {
+	imports := `
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-all-all.js"></script>
+	`
+
+	return imports
 }
