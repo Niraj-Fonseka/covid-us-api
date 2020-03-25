@@ -44,6 +44,19 @@ func (h *Handlers) GenerateSummaryData(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("New data generated"))
 }
 
+func (h *Handlers) GenerateCountyData(w http.ResponseWriter, r *http.Request) {
+	err := h.Services.Covid.GenerateUSCountyData()
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("New data generated"))
+}
+
 func (h *Handlers) UploadMainPage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Uploading main page")
 	h.Services.Covid.UploadMainPage()

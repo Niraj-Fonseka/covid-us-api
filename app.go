@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/render", handlers.RenderPage)
 	http.HandleFunc("/generate-daily", handlers.GenerateDailyData)
 	http.HandleFunc("/generate-summary", handlers.GenerateSummaryData)
+	http.HandleFunc("/generate-county", handlers.GenerateCountyData)
 	http.HandleFunc("/upload-mainpage", handlers.UploadMainPage)
 	http.HandleFunc("/upload-statespages", handlers.UploadStatePages)
 

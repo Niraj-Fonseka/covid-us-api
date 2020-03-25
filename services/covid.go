@@ -43,8 +43,69 @@ type StateAll struct {
 	StateData   map[string][]Daily `json:"state_data"`
 	LastUpdated string             `json:"last_updated"`
 }
+
+type USCounty struct {
+	CountyFIPS string `json:"countyFIPS"`
+	County     string `json:"county"`
+	StateAbbr  string `json:"stateAbbr"`
+	StateFIPS  string `json:"stateFIPS"`
+	Deaths     []int  `json:"deaths"`
+	Confirmed  []int  `json:"confirmed"`
+}
+
+type USCountyAll struct {
+	LastUpdated string                `json:"last_updated"`
+	CountyData  map[string][]USCounty `json:"countyData`
+}
+
 type Covid struct {
 	Request *requests.Request
+}
+
+func (c *Covid) GenerateUSCountyData() error {
+	log.Println("Executing a new api call ..")
+	response, err := c.Request.NewGetRequest(c.Request.CountyTrackingURL, "")
+
+	if err != nil {
+		return err
+	}
+
+	var usCountyData []USCounty
+
+	err = json.Unmarshal(response, &usCountyData)
+
+	if err != nil {
+		return err
+	}
+
+	dataStore := make(map[string][]USCounty)
+	//oraganizeData
+
+	for _, c := range usCountyData {
+		dataStore[c.StateAbbr] = append(dataStore[c.StateAbbr], c)
+	}
+
+	loc, err := time.LoadLocation("America/Chicago")
+	if err != nil {
+		return err
+
+	}
+
+	t := time.Now().In(loc)
+	lastUpdated := t.Format(time.RFC822)
+
+	d := USCountyAll{
+		CountyData:  dataStore,
+		LastUpdated: lastUpdated,
+	}
+
+	dataToWrite, err := json.Marshal(&d)
+
+	if err != nil {
+		return err
+	}
+
+	return file.SaveFile("usCounty.json", "", dataToWrite)
 }
 
 func (c *Covid) UploadMainPage() {
@@ -68,7 +129,7 @@ func (c *Covid) UploadAllStateFiles() {
 
 func (c *Covid) GenerateNewDailyCasesData() error {
 	log.Println("Executing a new api call ..")
-	response, err := c.Request.NewGetRequest("/api/states/daily")
+	response, err := c.Request.NewGetRequest(c.Request.BaseURLCovidTracking, "/api/states/daily")
 
 	if err != nil {
 		return err
@@ -140,7 +201,7 @@ func (c *Covid) GenerateStateData(dailyValues []Daily) error {
 }
 func (c *Covid) GenerateNewOverallCasesData() error {
 	log.Println("Executing a new api call ..overall")
-	response, err := c.Request.NewGetRequest("/api/us")
+	response, err := c.Request.NewGetRequest(c.Request.BaseURLCovidTracking, "/api/us")
 
 	if err != nil {
 		log.Println(err)
@@ -221,6 +282,30 @@ func (c *Covid) GetDailyStateDataRefactor() (StateAll, error) {
 
 	return stateDailyValues, err
 }
+
+func (c *Covid) GetCountyLevelDataRefactor() (USCountyAll, error) {
+	readData, err := file.ReadFile("usCounty.json", "")
+
+	var overallCountyValues USCountyAll
+
+	if err != nil {
+		log.Printf("Unable to open file : %s", err.Error())
+		err = c.GenerateUSCountyData()
+		if err != nil {
+			return overallCountyValues, err
+		}
+	} else {
+		log.Println("File read successfully no external call needed")
+	}
+
+	err = json.Unmarshal(readData, &overallCountyValues)
+	if err != nil {
+		return overallCountyValues, err
+	}
+
+	return overallCountyValues, err
+}
+
 func (c *Covid) GetSummaryCasesUSRefactor() (SummaryAll, error) {
 	readData, err := file.ReadFile("summary.json", "")
 
@@ -245,7 +330,7 @@ func (c *Covid) GetSummaryCasesUSRefactor() (SummaryAll, error) {
 }
 
 func (c *Covid) GetDailyCasesUS() ([]Daily, error) {
-	response, err := c.Request.NewGetRequest("/api/states/daily")
+	response, err := c.Request.NewGetRequest(c.Request.BaseURLCovidTracking, "/api/states/daily")
 
 	if err != nil {
 		return nil, err
@@ -266,7 +351,7 @@ func (c *Covid) GetDailyCasesUSByState(state string) ([]Daily, error) {
 
 	buildURL := fmt.Sprintf("/api/states/daily?state=%s", state)
 
-	response, err := c.Request.NewGetRequest(buildURL)
+	response, err := c.Request.NewGetRequest(c.Request.BaseURLCovidTracking, buildURL)
 
 	if err != nil {
 		return nil, err
@@ -286,7 +371,7 @@ func (c *Covid) GetDailyCasesUSByState(state string) ([]Daily, error) {
 
 func (c *Covid) GetUSSummary() ([]Summary, error) {
 
-	response, err := c.Request.NewGetRequest("/api/us")
+	response, err := c.Request.NewGetRequest(c.Request.BaseURLCovidTracking, "/api/us")
 
 	if err != nil {
 		return nil, err
