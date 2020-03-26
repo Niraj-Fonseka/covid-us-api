@@ -26,6 +26,9 @@ upload-mainpage:
 upload-statepages:
 	curl http://localhost:8080/upload-statespages
 
+upload-datasources:
+	curl http://localhost:8080/upload-datasources
+
 upload-all: upload-mainpage upload-statepages
 
 run-all: generate-all render upload-all

@@ -52,6 +52,10 @@ func (h *Handlers) UploadStatePages(w http.ResponseWriter, r *http.Request) {
 	h.Services.Covid.UploadAllStateFiles()
 }
 
+func (h *Handlers) UploadDatasourcesPage(w http.ResponseWriter, r *http.Request) {
+	h.Services.Covid.UploadDatasourcesPage()
+}
+
 func (h *Handlers) RenderPage(w http.ResponseWriter, r *http.Request) {
 
 	pageParam := r.URL.Query().Get("page")

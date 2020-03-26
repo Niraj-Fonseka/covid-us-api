@@ -54,6 +54,11 @@ func (c *Covid) UploadMainPage() {
 	s3Manageer.UploadFile("covid-19-us-dataset", "covid.html")
 }
 
+func (c *Covid) UploadDatasourcesPage() {
+	var s3Manageer S3Manager
+	s3Manageer.UploadFile("covid-19-us-dataset", "datasources.html")
+}
+
 func (c *Covid) UploadAllStateFiles() {
 	files, err := ioutil.ReadDir("./states")
 	if err != nil {

@@ -30,6 +30,10 @@ func (p *Pages) RegisterPages() {
 
 	statePage := StatePage{p.CovidService, p.CacheService}
 	p.RegisterNewPage("statepage", &statePage)
+
+	dataSourcesPage := DataSourcesPage{p.CovidService, p.CacheService}
+	p.RegisterNewPage("datasourcespage", &dataSourcesPage)
+
 }
 func (p *Pages) RegisterNewPage(pageName string, page PageFramework) {
 	p.Pages[pageName] = page
