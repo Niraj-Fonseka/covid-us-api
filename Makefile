@@ -7,8 +7,6 @@ build:
 run:
 	./covid
 
-
-
 render:
 	curl http://localhost:8080/render
 

@@ -22,28 +22,35 @@
 	}
 
 	#dropdown{
-		background-color:gainsboro;
-		width: 120px;
-		height: 30px;
+		background-color:white;
+		width: 200px;
+		height: 40px;
 		display: block;
 		font-size: 15px;
+		box-shadow: 3px 3px #888888;
 		border: none;
 		margin: 0 auto;
+		padding-left: 5px;
 		border-radius: 5px;
+		text-align: center;
+		font-weight: 600;
 	}
 
 
 	#goback{
 		border-radius: 5px;
-		width: 50px;
+		width: 70px;
 		height: 30px;
 		border: none;
 		font-size: 15px;
 		background-color: gainsboro;
+		box-shadow: 3px 3px #888888;
+		cursor:pointer;
 		display: block;
-		padding-left: 10px;
 		padding-top: 10px;
 		margin: 0 auto;
+		text-align: center;
+		font-weight: 600;
 	}
 
 	#gobackwrapper{
@@ -61,7 +68,7 @@
 		</div>
 
 		<div id="date-title">
-			<h1> Last updated : 24 Mar 20 22:35 CDT</h1>
+			<h1> Last updated : 25 Mar 20 21:36 CDT</h1>
 		</div>
 
 
@@ -151,11 +158,12 @@
 	$(function () {
 		$('#state-trending-deaths').highcharts( {
 			title:{
-				text : 'Deaths Trending'
+				text : 'Deaths'
 			},
 			chart: {
 				type: 'line',
-				backgroundColor: '#2A2D34'
+				backgroundColor: '#2A2D34',
+				backgroundColor: 'transparent'
 			},
 			xAxis: {
 				type: 'datetime',
@@ -166,6 +174,13 @@
 					text: 'dates'
 				},
 			},
+
+			yAxis: {
+				title:{
+					text: 'deaths'
+				},
+			},
+		
 		
 			plotOptions: {
 				line: {
@@ -182,12 +197,12 @@
 		
 			series: [{
 				name: "deaths",
-				data: [[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),0],[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),0],[Date.UTC(2020, 2, 21),0],[Date.UTC(2020, 2, 22),0],[Date.UTC(2020, 2, 23),0],[Date.UTC(2020, 2, 24),0]]
+				data: [[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),0],[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),0],[Date.UTC(2020, 2, 21),0],[Date.UTC(2020, 2, 22),0],[Date.UTC(2020, 2, 23),0],[Date.UTC(2020, 2, 24),0],[Date.UTC(2020, 2, 25),0]]
 			}]
 		});
 		$('#state-trending-positive').highcharts( {
 			title:{
-				text : 'Positive Trending'
+				text : 'Positive Cases'
 			},
 			chart: {
 				type: 'line',
@@ -202,6 +217,13 @@
 					text: 'dates'
 				},
 			},
+
+			yAxis: {
+				title:{
+					text: 'cases'
+				},
+			},
+		
 		
 			plotOptions: {
 				line: {
@@ -218,7 +240,7 @@
 		
 			series: [{
 				name: "positive",
-				data: [[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),1],[Date.UTC(2020, 2, 12),4],[Date.UTC(2020, 2, 13),4],[Date.UTC(2020, 2, 14),6],[Date.UTC(2020, 2, 15),6],[Date.UTC(2020, 2, 16),8],[Date.UTC(2020, 2, 17),16],[Date.UTC(2020, 2, 18),25],[Date.UTC(2020, 2, 19),30],[Date.UTC(2020, 2, 20),38],[Date.UTC(2020, 2, 21),45],[Date.UTC(2020, 2, 22),56],[Date.UTC(2020, 2, 23),68],[Date.UTC(2020, 2, 24),91]]
+				data: [[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),1],[Date.UTC(2020, 2, 12),4],[Date.UTC(2020, 2, 13),4],[Date.UTC(2020, 2, 14),6],[Date.UTC(2020, 2, 15),6],[Date.UTC(2020, 2, 16),8],[Date.UTC(2020, 2, 17),16],[Date.UTC(2020, 2, 18),25],[Date.UTC(2020, 2, 19),30],[Date.UTC(2020, 2, 20),38],[Date.UTC(2020, 2, 21),45],[Date.UTC(2020, 2, 22),56],[Date.UTC(2020, 2, 23),68],[Date.UTC(2020, 2, 24),91],[Date.UTC(2020, 2, 25),115]]
 			}]
 		});
 		});

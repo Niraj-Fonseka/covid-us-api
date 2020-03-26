@@ -192,7 +192,7 @@ func (c *CovidPage) GenerateChart(data ...string) string {
 
 			chart: {
 				map: 'countries/us/us-all',
-				borderWidth: 1
+				backgroundColor: 'transparent'
 			},
 	
 			title: {
@@ -257,7 +257,7 @@ func (c *CovidPage) GenerateChart(data ...string) string {
 
 			chart: {
 				map: 'countries/us/us-all',
-				borderWidth: 1
+				backgroundColor: 'transparent'
 			},
 	
 			title: {
@@ -432,6 +432,7 @@ func (c *CovidPage) GenerateBody() string {
 		</div>
 	</div>
 	<div id="container-death" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+	<hr>
 	<div id="container-positive" style="min-width: 310px; height: 600px; margin: 0 auto"></div>`
 
 	return body
@@ -445,14 +446,18 @@ func (c *CovidPage) GenerateStyle() string {
 	}
 
 	#dropdown{
-		background-color:gainsboro;
-		width: 120px;
-		height: 30px;
+		background-color:white;
+		width: 200px;
+		height: 40px;
 		display: block;
 		font-size: 15px;
+		box-shadow: 3px 3px #888888;
 		border: none;
 		margin: 0 auto;
+		padding-left: 5px;
 		border-radius: 5px;
+		text-align: center;
+		font-weight: 600;
 	}
 
 	#dropdownwrapper{
@@ -468,9 +473,7 @@ func (c *CovidPage) GenerateStyle() string {
 	#positive{
 		flex: 1; /* additionally, equal width */
 		padding: 1em;
-		border:1px solid black;
 		height: 100px;
-		border-radius: 2px;
 		text-align: center;
 		border-color: #393e46;
 	}

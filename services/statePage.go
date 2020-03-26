@@ -128,11 +128,12 @@ func (c *StatePage) GenerateChart(data ...string) string {
 	$(function () {
 		$('#state-trending-deaths').highcharts( {
 			title:{
-				text : 'Deaths Trending'
+				text : 'Deaths'
 			},
 			chart: {
 				type: 'line',
-				backgroundColor: '#2A2D34'
+				backgroundColor: '#2A2D34',
+				backgroundColor: 'transparent'
 			},
 			xAxis: {
 				type: 'datetime',
@@ -143,6 +144,13 @@ func (c *StatePage) GenerateChart(data ...string) string {
 					text: 'dates'
 				},
 			},
+
+			yAxis: {
+				title:{
+					text: 'deaths'
+				},
+			},
+		
 		
 			plotOptions: {
 				line: {
@@ -164,7 +172,7 @@ func (c *StatePage) GenerateChart(data ...string) string {
 		});
 		$('#state-trending-positive').highcharts( {
 			title:{
-				text : 'Positive Trending'
+				text : 'Positive Cases'
 			},
 			chart: {
 				type: 'line',
@@ -179,6 +187,13 @@ func (c *StatePage) GenerateChart(data ...string) string {
 					text: 'dates'
 				},
 			},
+
+			yAxis: {
+				title:{
+					text: 'cases'
+				},
+			},
+		
 		
 			plotOptions: {
 				line: {
@@ -304,28 +319,35 @@ func (c *StatePage) GenerateStyle() string {
 	}
 
 	#dropdown{
-		background-color:gainsboro;
-		width: 120px;
-		height: 30px;
+		background-color:white;
+		width: 200px;
+		height: 40px;
 		display: block;
 		font-size: 15px;
+		box-shadow: 3px 3px #888888;
 		border: none;
 		margin: 0 auto;
+		padding-left: 5px;
 		border-radius: 5px;
+		text-align: center;
+		font-weight: 600;
 	}
 
 
 	#goback{
 		border-radius: 5px;
-		width: 50px;
+		width: 70px;
 		height: 30px;
 		border: none;
 		font-size: 15px;
 		background-color: gainsboro;
+		box-shadow: 3px 3px #888888;
+		cursor:pointer;
 		display: block;
-		padding-left: 10px;
 		padding-top: 10px;
 		margin: 0 auto;
+		text-align: center;
+		font-weight: 600;
 	}
 
 	#gobackwrapper{

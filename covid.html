@@ -19,14 +19,18 @@
 	}
 
 	#dropdown{
-		background-color:gainsboro;
-		width: 120px;
-		height: 30px;
+		background-color:white;
+		width: 200px;
+		height: 40px;
 		display: block;
 		font-size: 15px;
+		box-shadow: 3px 3px #888888;
 		border: none;
 		margin: 0 auto;
+		padding-left: 5px;
 		border-radius: 5px;
+		text-align: center;
+		font-weight: 600;
 	}
 
 	#dropdownwrapper{
@@ -42,9 +46,7 @@
 	#positive{
 		flex: 1; /* additionally, equal width */
 		padding: 1em;
-		border:1px solid black;
 		height: 100px;
-		border-radius: 2px;
 		text-align: center;
 		border-color: #393e46;
 	}
@@ -76,11 +78,16 @@
 		color: #eeeeee;
 
 	}
+
+	#vertline{
+		border-left: 2px solid green;
+		height: 130px;
+	}
 	</style>
 	
 	
 	<div id="date-title">
-		<h1> Last updated : 24 Mar 20 22:35 CDT</h1>
+		<h1> Last updated : 25 Mar 20 21:36 CDT</h1>
 	</div>
 	<div id="dropdownwrapper">
 		<select id="dropdown" onchange="javascript:handleSelect(this)">
@@ -149,47 +156,56 @@
 			Positive
 		</div>
 		<div id="number">
-				53192
+				64180
 		</div>
 		</div>
+
+		<div id="vertline"></div>
 
 		<div id="positive">
 			<div id="category">
 				Negative
 			</div>
 			<div id="number">
-				299928
+				357405
 			</div>
 		</div>
+
+		<div id="vertline"></div>
 
 		<div id="positive">
 			<div id="category">
 				Hospitalized
 			</div>
 			<div id="number">
-				4865
+				6136
 			</div>
 		</div>
+
+		<div id="vertline"></div>
 
 		<div id="positive">
 			<div id="category">
 				Deaths
 			</div>
 			<div id="number">
-				709
+				900
 			</div>
 		</div>
+		
+		<div id="vertline"></div>
 
 		<div id="positive">
 			<div id="category">
 				Total
 			</div>
 			<div id="number">
-				367710
+				472820
 			</div>
 		</div>
 	</div>
 	<div id="container-death" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+	<hr>
 	<div id="container-positive" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
 	<script>
 
@@ -208,7 +224,7 @@
 
 			chart: {
 				map: 'countries/us/us-all',
-				borderWidth: 1
+				backgroundColor: 'transparent'
 			},
 	
 			title: {
@@ -254,7 +270,7 @@
 				animation: {
 					duration: 1000
 				},
-				data: [{"value":0.00001,"code":"AK"},{"value":0.00001,"code":"AL"},{"value":0.00001,"code":"AR"},{"value":0.00001,"code":"AS"},{"value":5,"code":"AZ"},{"value":40,"code":"CA"},{"value":7,"code":"CO"},{"value":12,"code":"CT"},{"value":2,"code":"DC"},{"value":0.00001,"code":"DE"},{"value":18,"code":"FL"},{"value":32,"code":"GA"},{"value":1,"code":"GU"},{"value":1,"code":"HI"},{"value":0.00001,"code":"IA"},{"value":0.00001,"code":"ID"},{"value":16,"code":"IL"},{"value":12,"code":"IN"},{"value":2,"code":"KS"},{"value":4,"code":"KY"},{"value":46,"code":"LA"},{"value":11,"code":"MA"},{"value":3,"code":"MD"},{"value":0.00001,"code":"ME"},{"value":24,"code":"MI"},{"value":1,"code":"MN"},{"value":3,"code":"MO"},{"value":0.00001,"code":"MP"},{"value":1,"code":"MS"},{"value":0.00001,"code":"MT"},{"value":0.00001,"code":"NC"},{"value":0.00001,"code":"ND"},{"value":0.00001,"code":"NE"},{"value":1,"code":"NH"},{"value":44,"code":"NJ"},{"value":0.00001,"code":"NM"},{"value":4,"code":"NV"},{"value":210,"code":"NY"},{"value":8,"code":"OH"},{"value":3,"code":"OK"},{"value":8,"code":"OR"},{"value":7,"code":"PA"},{"value":2,"code":"PR"},{"value":0.00001,"code":"RI"},{"value":5,"code":"SC"},{"value":1,"code":"SD"},{"value":2,"code":"TN"},{"value":9,"code":"TX"},{"value":1,"code":"UT"},{"value":7,"code":"VA"},{"value":0.00001,"code":"VI"},{"value":7,"code":"VT"},{"value":110,"code":"WA"},{"value":5,"code":"WI"},{"value":0.00001,"code":"WV"},{"value":0.00001,"code":"WY"}],
+				data: [{"value":1,"code":"AK"},{"value":0.00001,"code":"AL"},{"value":2,"code":"AR"},{"value":0.00001,"code":"AS"},{"value":6,"code":"AZ"},{"value":40,"code":"CA"},{"value":11,"code":"CO"},{"value":19,"code":"CT"},{"value":2,"code":"DC"},{"value":0.00001,"code":"DE"},{"value":22,"code":"FL"},{"value":40,"code":"GA"},{"value":1,"code":"GU"},{"value":1,"code":"HI"},{"value":1,"code":"IA"},{"value":0.00001,"code":"ID"},{"value":19,"code":"IL"},{"value":14,"code":"IN"},{"value":3,"code":"KS"},{"value":4,"code":"KY"},{"value":65,"code":"LA"},{"value":15,"code":"MA"},{"value":4,"code":"MD"},{"value":0.00001,"code":"ME"},{"value":43,"code":"MI"},{"value":1,"code":"MN"},{"value":8,"code":"MO"},{"value":0.00001,"code":"MP"},{"value":2,"code":"MS"},{"value":0.00001,"code":"MT"},{"value":1,"code":"NC"},{"value":0.00001,"code":"ND"},{"value":0.00001,"code":"NE"},{"value":1,"code":"NH"},{"value":62,"code":"NJ"},{"value":1,"code":"NM"},{"value":6,"code":"NV"},{"value":285,"code":"NY"},{"value":10,"code":"OH"},{"value":5,"code":"OK"},{"value":8,"code":"OR"},{"value":11,"code":"PA"},{"value":2,"code":"PR"},{"value":0.00001,"code":"RI"},{"value":7,"code":"SC"},{"value":1,"code":"SD"},{"value":3,"code":"TN"},{"value":12,"code":"TX"},{"value":1,"code":"UT"},{"value":9,"code":"VA"},{"value":0.00001,"code":"VI"},{"value":8,"code":"VT"},{"value":123,"code":"WA"},{"value":7,"code":"WI"},{"value":0.00001,"code":"WV"},{"value":0.00001,"code":"WY"}],
 				joinBy: ['postal-code', 'code'],
 				dataLabels: {
 					enabled: true,
@@ -273,7 +289,7 @@
 
 			chart: {
 				map: 'countries/us/us-all',
-				borderWidth: 1
+				backgroundColor: 'transparent'
 			},
 	
 			title: {
@@ -315,7 +331,7 @@
 				animation: {
 					duration: 1000
 				},
-				data: [{"value":36,"code":"AK"},{"value":215,"code":"AL"},{"value":218,"code":"AR"},{"value":0.00001,"code":"AS"},{"value":357,"code":"AZ"},{"value":2102,"code":"CA"},{"value":720,"code":"CO"},{"value":618,"code":"CT"},{"value":137,"code":"DC"},{"value":91,"code":"DE"},{"value":1412,"code":"FL"},{"value":1026,"code":"GA"},{"value":32,"code":"GU"},{"value":77,"code":"HI"},{"value":124,"code":"IA"},{"value":50,"code":"ID"},{"value":1551,"code":"IL"},{"value":365,"code":"IN"},{"value":98,"code":"KS"},{"value":124,"code":"KY"},{"value":1388,"code":"LA"},{"value":1159,"code":"MA"},{"value":349,"code":"MD"},{"value":125,"code":"ME"},{"value":1791,"code":"MI"},{"value":262,"code":"MN"},{"value":183,"code":"MO"},{"value":0.00001,"code":"MP"},{"value":320,"code":"MS"},{"value":46,"code":"MT"},{"value":398,"code":"NC"},{"value":34,"code":"ND"},{"value":52,"code":"NE"},{"value":101,"code":"NH"},{"value":3675,"code":"NJ"},{"value":83,"code":"NM"},{"value":278,"code":"NV"},{"value":25665,"code":"NY"},{"value":564,"code":"OH"},{"value":106,"code":"OK"},{"value":209,"code":"OR"},{"value":851,"code":"PA"},{"value":39,"code":"PR"},{"value":106,"code":"RI"},{"value":298,"code":"SC"},{"value":30,"code":"SD"},{"value":667,"code":"TN"},{"value":410,"code":"TX"},{"value":299,"code":"UT"},{"value":290,"code":"VA"},{"value":17,"code":"VI"},{"value":95,"code":"VT"},{"value":2221,"code":"WA"},{"value":457,"code":"WI"},{"value":20,"code":"WV"},{"value":29,"code":"WY"}],
+				data: [{"value":42,"code":"AK"},{"value":283,"code":"AL"},{"value":280,"code":"AR"},{"value":0.00001,"code":"AS"},{"value":450,"code":"AZ"},{"value":2102,"code":"CA"},{"value":912,"code":"CO"},{"value":875,"code":"CT"},{"value":183,"code":"DC"},{"value":115,"code":"DE"},{"value":1682,"code":"FL"},{"value":1247,"code":"GA"},{"value":37,"code":"GU"},{"value":90,"code":"HI"},{"value":145,"code":"IA"},{"value":73,"code":"ID"},{"value":1865,"code":"IL"},{"value":477,"code":"IN"},{"value":126,"code":"KS"},{"value":157,"code":"KY"},{"value":1795,"code":"LA"},{"value":1838,"code":"MA"},{"value":423,"code":"MD"},{"value":149,"code":"ME"},{"value":2294,"code":"MI"},{"value":287,"code":"MN"},{"value":356,"code":"MO"},{"value":0.00001,"code":"MP"},{"value":377,"code":"MS"},{"value":53,"code":"MT"},{"value":504,"code":"NC"},{"value":39,"code":"ND"},{"value":61,"code":"NE"},{"value":108,"code":"NH"},{"value":4402,"code":"NJ"},{"value":100,"code":"NM"},{"value":321,"code":"NV"},{"value":30811,"code":"NY"},{"value":704,"code":"OH"},{"value":164,"code":"OK"},{"value":209,"code":"OR"},{"value":1127,"code":"PA"},{"value":51,"code":"PR"},{"value":124,"code":"RI"},{"value":424,"code":"SC"},{"value":41,"code":"SD"},{"value":784,"code":"TN"},{"value":974,"code":"TX"},{"value":346,"code":"UT"},{"value":391,"code":"VA"},{"value":17,"code":"VI"},{"value":123,"code":"VT"},{"value":2469,"code":"WA"},{"value":585,"code":"WI"},{"value":39,"code":"WV"},{"value":44,"code":"WY"}],
 				joinBy: ['postal-code', 'code'],
 				dataLabels: {
 					enabled: true,
