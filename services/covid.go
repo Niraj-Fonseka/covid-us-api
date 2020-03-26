@@ -26,7 +26,7 @@ type Summary struct {
 	PosNeg       int `json:"posNeg"`
 	Hospitalized int `json:"hospitalized"`
 	Death        int `json:"death"`
-	Total        int `json:"total"`
+	Total        int `json:"totalTestResults"`
 }
 
 type DailyAll struct {

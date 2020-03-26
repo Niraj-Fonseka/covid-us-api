@@ -31,4 +31,10 @@ upload-datasources:
 
 upload-all: upload-mainpage upload-statepages
 
+remove-generated: 
+	rm  daily.json
+	rm  stateData.json 
+	rm  summary.json 
+
 run-all: generate-all render upload-all
+
