@@ -20,6 +20,7 @@ func main() {
 	http.HandleFunc("/generate-summary", handlers.GenerateSummaryData)
 	http.HandleFunc("/upload-mainpage", handlers.UploadMainPage)
 	http.HandleFunc("/upload-statespages", handlers.UploadStatePages)
+	http.HandleFunc("/upload-datasources", handlers.UploadDatasourcesPage)
 
 	fmt.Println("Listening..")
 	http.ListenAndServe(":8080", nil)

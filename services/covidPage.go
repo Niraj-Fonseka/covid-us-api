@@ -324,6 +324,9 @@ func (c *CovidPage) GenerateBody() string {
 	<div id="date-title">
 		<h1> Last updated : %s</h1>
 	</div>
+	<div id="data-sources">
+		<a href="https://covid-19-us-dataset.s3.amazonaws.com/datasources.html"> Data Sources </a>
+	</div>
 	<div id="dropdownwrapper">
 		<select id="dropdown" onchange="javascript:handleSelect(this)">
 			<option>select state</option>
@@ -504,6 +507,18 @@ func (c *CovidPage) GenerateStyle() string {
 		margin-top: 10px;
 		color: #eeeeee;
 
+	}
+
+	#data-sources{
+		text-align: center;
+		font-size: 15px;
+		padding-top: 10px;
+		color: #E0E0E3;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none; /* no underline */
 	}
 	</style>
 	`
