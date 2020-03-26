@@ -16,6 +16,9 @@ generate-daily:
 generate-summary:
 	curl http://localhost:8080/generate-summary
 
+generate-county:
+	curl http://localhost:8080/generate-county
+
 generate-all: 
 	curl http://localhost:8080/generate-daily
 	curl http://localhost:8080/generate-summary

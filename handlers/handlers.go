@@ -18,6 +18,19 @@ func RegisterHandlers(s *services.Services, p *services.Pages) *Handlers {
 	}
 }
 
+func (h *Handlers) GenerateCountyData(w http.ResponseWriter, r *http.Request) {
+	err := h.Services.Covid.GenerateUSCountyData()
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("New data generated"))
+}
+
 func (h *Handlers) GenerateDailyData(w http.ResponseWriter, r *http.Request) {
 	err := h.Services.Covid.GenerateNewDailyCasesData()
 
