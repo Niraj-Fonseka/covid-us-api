@@ -2,9 +2,12 @@
 	<head>
 	
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-gu-all.js"></script>
 	
 	</head>
 
@@ -14,6 +17,14 @@
 	#date-title{
 		text-align: center;
 		color: #E0E0E3;
+	}
+
+	#note{
+		margin: 10px;
+		text-align: center;
+		color: #E0E0E3;
+		font-style: italic;
+
 	}
 
 	#state-title{
@@ -68,7 +79,7 @@
 		</div>
 
 		<div id="date-title">
-			<h1> Last updated : 26 Mar 20 11:38 CDT</h1>
+			<h1> Last updated : 27 Mar 20 00:56 CDT</h1>
 		</div>
 
 
@@ -138,9 +149,17 @@
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
+
+		<div id="note">
+			NOTE : The data in the map may be a few datapoints behind the line graph since the data is collected from different datasources.
+		</div>
 		
+		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<hr>
+		<div id="state-trending-positive-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
 	
@@ -156,6 +175,41 @@
 	});
 
 	$(function () {
+		$('#state-trending-deaths-map').highcharts('Map', {
+			title:{
+				text : 'Deaths by County'
+			},
+			chart: {
+				map: 'countries/us/us-gu-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [],
+				name: 'Deaths',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-deaths').highcharts( {
 			title:{
 				text : 'Deaths'
@@ -197,9 +251,46 @@
 		
 			series: [{
 				name: "deaths",
-				data: [[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),0],[Date.UTC(2020, 2, 21),0],[Date.UTC(2020, 2, 22),1],[Date.UTC(2020, 2, 23),1],[Date.UTC(2020, 2, 24),1],[Date.UTC(2020, 2, 25),1]]
+				data: [[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),0],[Date.UTC(2020, 2, 21),0],[Date.UTC(2020, 2, 22),1],[Date.UTC(2020, 2, 23),1],[Date.UTC(2020, 2, 24),1],[Date.UTC(2020, 2, 25),1],[Date.UTC(2020, 2, 26),1]]
 			}]
 		});
+
+
+		$('#state-trending-positive-map').highcharts('Map', {
+			title:{
+				text : 'Positive cases by County'
+			},
+			chart: {
+				map: 'countries/us/us-gu-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [],
+				name: 'Positive',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-positive').highcharts( {
 			title:{
 				text : 'Positive Cases'
@@ -240,9 +331,11 @@
 		
 			series: [{
 				name: "positive",
-				data: [[Date.UTC(2020, 2, 16),3],[Date.UTC(2020, 2, 17),5],[Date.UTC(2020, 2, 18),8],[Date.UTC(2020, 2, 19),12],[Date.UTC(2020, 2, 20),14],[Date.UTC(2020, 2, 21),15],[Date.UTC(2020, 2, 22),27],[Date.UTC(2020, 2, 23),29],[Date.UTC(2020, 2, 24),32],[Date.UTC(2020, 2, 25),37]]
+				data: [[Date.UTC(2020, 2, 16),3],[Date.UTC(2020, 2, 17),5],[Date.UTC(2020, 2, 18),8],[Date.UTC(2020, 2, 19),12],[Date.UTC(2020, 2, 20),14],[Date.UTC(2020, 2, 21),15],[Date.UTC(2020, 2, 22),27],[Date.UTC(2020, 2, 23),29],[Date.UTC(2020, 2, 24),32],[Date.UTC(2020, 2, 25),37],[Date.UTC(2020, 2, 26),45]]
 			}]
 		});
+
+
 		});
 	</script>
 	</body>

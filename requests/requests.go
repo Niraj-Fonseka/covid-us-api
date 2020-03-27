@@ -8,13 +8,14 @@ import (
 )
 
 type Request struct {
-	Client  *http.Client
-	BaseURL string
+	Client               *http.Client
+	BaseURLCovidTracking string
+	CountyTrackingURL    string
 }
 
-func (r *Request) NewGetRequest(route string) ([]byte, error) {
+func (r *Request) NewGetRequest(url, route string) ([]byte, error) {
 
-	builtURL, _ := buildURL(r.BaseURL, route)
+	builtURL, _ := buildURL(url, route)
 
 	//TO DO : Error check
 

@@ -16,9 +16,13 @@ generate-daily:
 generate-summary:
 	curl http://localhost:8080/generate-summary
 
+generate-county:
+	curl http://localhost:8080/generate-county
+
 generate-all: 
 	curl http://localhost:8080/generate-daily
 	curl http://localhost:8080/generate-summary
+	curl http://localhost:8080/generate-county
 
 upload-mainpage:
 	curl http://localhost:8080/upload-mainpage
@@ -35,6 +39,7 @@ remove-generated:
 	rm  daily.json
 	rm  stateData.json 
 	rm  summary.json 
+	rm  usCounty.json
 
 run-all: generate-all render upload-all
 

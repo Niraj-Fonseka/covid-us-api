@@ -2,9 +2,12 @@
 	<head>
 	
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-nj-all.js"></script>
 	
 	</head>
 
@@ -14,6 +17,14 @@
 	#date-title{
 		text-align: center;
 		color: #E0E0E3;
+	}
+
+	#note{
+		margin: 10px;
+		text-align: center;
+		color: #E0E0E3;
+		font-style: italic;
+
 	}
 
 	#state-title{
@@ -68,7 +79,7 @@
 		</div>
 
 		<div id="date-title">
-			<h1> Last updated : 26 Mar 20 11:38 CDT</h1>
+			<h1> Last updated : 27 Mar 20 00:56 CDT</h1>
 		</div>
 
 
@@ -138,9 +149,17 @@
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
+
+		<div id="note">
+			NOTE : The data in the map may be a few datapoints behind the line graph since the data is collected from different datasources.
+		</div>
 		
+		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<hr>
+		<div id="state-trending-positive-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
 	
@@ -156,6 +175,41 @@
 	});
 
 	$(function () {
+		$('#state-trending-deaths-map').highcharts('Map', {
+			title:{
+				text : 'Deaths by County'
+			},
+			chart: {
+				map: 'countries/us/us-nj-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-nj-003', 14 ],['us-nj-007', 2 ],['us-nj-013', 7 ],['us-nj-017', 3 ],['us-nj-023', 1 ],['us-nj-025', 4 ],['us-nj-027', 4 ],['us-nj-029', 1 ],['us-nj-031', 2 ],['us-nj-035', 2 ],['us-nj-039', 1 ],['us-nj-041', 1 ]],
+				name: 'Deaths',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-deaths').highcharts( {
 			title:{
 				text : 'Deaths'
@@ -197,9 +251,46 @@
 		
 			series: [{
 				name: "deaths",
-				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),1],[Date.UTC(2020, 2, 12),1],[Date.UTC(2020, 2, 13),1],[Date.UTC(2020, 2, 14),1],[Date.UTC(2020, 2, 15),2],[Date.UTC(2020, 2, 16),2],[Date.UTC(2020, 2, 17),3],[Date.UTC(2020, 2, 18),5],[Date.UTC(2020, 2, 19),9],[Date.UTC(2020, 2, 20),11],[Date.UTC(2020, 2, 21),16],[Date.UTC(2020, 2, 22),20],[Date.UTC(2020, 2, 23),27],[Date.UTC(2020, 2, 24),44],[Date.UTC(2020, 2, 25),62]]
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),1],[Date.UTC(2020, 2, 12),1],[Date.UTC(2020, 2, 13),1],[Date.UTC(2020, 2, 14),1],[Date.UTC(2020, 2, 15),2],[Date.UTC(2020, 2, 16),2],[Date.UTC(2020, 2, 17),3],[Date.UTC(2020, 2, 18),5],[Date.UTC(2020, 2, 19),9],[Date.UTC(2020, 2, 20),11],[Date.UTC(2020, 2, 21),16],[Date.UTC(2020, 2, 22),20],[Date.UTC(2020, 2, 23),27],[Date.UTC(2020, 2, 24),44],[Date.UTC(2020, 2, 25),62],[Date.UTC(2020, 2, 26),81]]
 			}]
 		});
+
+
+		$('#state-trending-positive-map').highcharts('Map', {
+			title:{
+				text : 'Positive cases by County'
+			},
+			chart: {
+				map: 'countries/us/us-nj-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-nj-001', 9 ],['us-nj-003', 819 ],['us-nj-005', 48 ],['us-nj-007', 61 ],['us-nj-009', 4 ],['us-nj-011', 3 ],['us-nj-013', 381 ],['us-nj-015', 23 ],['us-nj-017', 260 ],['us-nj-019', 25 ],['us-nj-021', 82 ],['us-nj-023', 316 ],['us-nj-025', 313 ],['us-nj-027', 223 ],['us-nj-029', 222 ],['us-nj-031', 255 ],['us-nj-033', 1 ],['us-nj-035', 117 ],['us-nj-037', 27 ],['us-nj-039', 262 ],['us-nj-041', 18 ]],
+				name: 'Positive',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-positive').highcharts( {
 			title:{
 				text : 'Positive Cases'
@@ -240,9 +331,11 @@
 		
 			series: [{
 				name: "positive",
-				data: [[Date.UTC(2020, 2, 05),1],[Date.UTC(2020, 2, 06),1],[Date.UTC(2020, 2, 07),4],[Date.UTC(2020, 2, 08),6],[Date.UTC(2020, 2, 09),11],[Date.UTC(2020, 2, 10),15],[Date.UTC(2020, 2, 11),24],[Date.UTC(2020, 2, 12),30],[Date.UTC(2020, 2, 13),50],[Date.UTC(2020, 2, 14),50],[Date.UTC(2020, 2, 15),98],[Date.UTC(2020, 2, 16),178],[Date.UTC(2020, 2, 17),267],[Date.UTC(2020, 2, 18),427],[Date.UTC(2020, 2, 19),742],[Date.UTC(2020, 2, 20),890],[Date.UTC(2020, 2, 21),1327],[Date.UTC(2020, 2, 22),1914],[Date.UTC(2020, 2, 23),2844],[Date.UTC(2020, 2, 24),3675],[Date.UTC(2020, 2, 25),4402]]
+				data: [[Date.UTC(2020, 2, 05),1],[Date.UTC(2020, 2, 06),1],[Date.UTC(2020, 2, 07),4],[Date.UTC(2020, 2, 08),6],[Date.UTC(2020, 2, 09),11],[Date.UTC(2020, 2, 10),15],[Date.UTC(2020, 2, 11),24],[Date.UTC(2020, 2, 12),30],[Date.UTC(2020, 2, 13),50],[Date.UTC(2020, 2, 14),50],[Date.UTC(2020, 2, 15),98],[Date.UTC(2020, 2, 16),178],[Date.UTC(2020, 2, 17),267],[Date.UTC(2020, 2, 18),427],[Date.UTC(2020, 2, 19),742],[Date.UTC(2020, 2, 20),890],[Date.UTC(2020, 2, 21),1327],[Date.UTC(2020, 2, 22),1914],[Date.UTC(2020, 2, 23),2844],[Date.UTC(2020, 2, 24),3675],[Date.UTC(2020, 2, 25),4402],[Date.UTC(2020, 2, 26),6876]]
 			}]
 		});
+
+
 		});
 	</script>
 	</body>

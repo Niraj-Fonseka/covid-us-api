@@ -2,9 +2,12 @@
 	<head>
 	
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-oh-all.js"></script>
 	
 	</head>
 
@@ -14,6 +17,14 @@
 	#date-title{
 		text-align: center;
 		color: #E0E0E3;
+	}
+
+	#note{
+		margin: 10px;
+		text-align: center;
+		color: #E0E0E3;
+		font-style: italic;
+
 	}
 
 	#state-title{
@@ -68,7 +79,7 @@
 		</div>
 
 		<div id="date-title">
-			<h1> Last updated : 26 Mar 20 11:38 CDT</h1>
+			<h1> Last updated : 27 Mar 20 00:56 CDT</h1>
 		</div>
 
 
@@ -138,9 +149,17 @@
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
+
+		<div id="note">
+			NOTE : The data in the map may be a few datapoints behind the line graph since the data is collected from different datasources.
+		</div>
 		
+		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<hr>
+		<div id="state-trending-positive-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
 	
@@ -156,6 +175,41 @@
 	});
 
 	$(function () {
+		$('#state-trending-deaths-map').highcharts('Map', {
+			title:{
+				text : 'Deaths by County'
+			},
+			chart: {
+				map: 'countries/us/us-oh-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-oh-035', 2 ],['us-oh-043', 1 ],['us-oh-049', 2 ],['us-oh-053', 1 ],['us-oh-095', 1 ],['us-oh-109', 1 ],['us-oh-151', 2 ]],
+				name: 'Deaths',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-deaths').highcharts( {
 			title:{
 				text : 'Deaths'
@@ -197,9 +251,46 @@
 		
 			series: [{
 				name: "deaths",
-				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),0],[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),1],[Date.UTC(2020, 2, 21),3],[Date.UTC(2020, 2, 22),3],[Date.UTC(2020, 2, 23),6],[Date.UTC(2020, 2, 24),8],[Date.UTC(2020, 2, 25),10]]
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),0],[Date.UTC(2020, 2, 16),0],[Date.UTC(2020, 2, 17),0],[Date.UTC(2020, 2, 18),0],[Date.UTC(2020, 2, 19),0],[Date.UTC(2020, 2, 20),1],[Date.UTC(2020, 2, 21),3],[Date.UTC(2020, 2, 22),3],[Date.UTC(2020, 2, 23),6],[Date.UTC(2020, 2, 24),8],[Date.UTC(2020, 2, 25),10],[Date.UTC(2020, 2, 26),15]]
 			}]
 		});
+
+
+		$('#state-trending-positive-map').highcharts('Map', {
+			title:{
+				text : 'Positive cases by County'
+			},
+			chart: {
+				map: 'countries/us/us-oh-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-oh-005', 1 ],['us-oh-007', 3 ],['us-oh-013', 3 ],['us-oh-017', 18 ],['us-oh-019', 3 ],['us-oh-021', 1 ],['us-oh-023', 2 ],['us-oh-025', 5 ],['us-oh-027', 2 ],['us-oh-029', 4 ],['us-oh-031', 4 ],['us-oh-033', 1 ],['us-oh-035', 206 ],['us-oh-037', 1 ],['us-oh-039', 2 ],['us-oh-041', 12 ],['us-oh-043', 2 ],['us-oh-045', 5 ],['us-oh-047', 1 ],['us-oh-049', 88 ],['us-oh-053', 1 ],['us-oh-055', 4 ],['us-oh-057', 3 ],['us-oh-061', 48 ],['us-oh-063', 1 ],['us-oh-071', 1 ],['us-oh-077', 2 ],['us-oh-083', 2 ],['us-oh-085', 14 ],['us-oh-087', 1 ],['us-oh-089', 3 ],['us-oh-091', 2 ],['us-oh-093', 37 ],['us-oh-095', 23 ],['us-oh-097', 2 ],['us-oh-099', 42 ],['us-oh-101', 4 ],['us-oh-103', 22 ],['us-oh-107', 1 ],['us-oh-109', 19 ],['us-oh-113', 14 ],['us-oh-129', 1 ],['us-oh-133', 4 ],['us-oh-139', 4 ],['us-oh-143', 1 ],['us-oh-147', 1 ],['us-oh-151', 12 ],['us-oh-153', 43 ],['us-oh-155', 9 ],['us-oh-157', 3 ],['us-oh-159', 3 ],['us-oh-165', 8 ],['us-oh-167', 1 ],['us-oh-169', 1 ],['us-oh-173', 3 ]],
+				name: 'Positive',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-positive').highcharts( {
 			title:{
 				text : 'Positive Cases'
@@ -240,9 +331,11 @@
 		
 			series: [{
 				name: "positive",
-				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),3],[Date.UTC(2020, 2, 10),3],[Date.UTC(2020, 2, 11),4],[Date.UTC(2020, 2, 12),5],[Date.UTC(2020, 2, 13),13],[Date.UTC(2020, 2, 14),13],[Date.UTC(2020, 2, 15),36],[Date.UTC(2020, 2, 16),50],[Date.UTC(2020, 2, 17),67],[Date.UTC(2020, 2, 18),88],[Date.UTC(2020, 2, 19),119],[Date.UTC(2020, 2, 20),169],[Date.UTC(2020, 2, 21),247],[Date.UTC(2020, 2, 22),351],[Date.UTC(2020, 2, 23),442],[Date.UTC(2020, 2, 24),564],[Date.UTC(2020, 2, 25),704]]
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),3],[Date.UTC(2020, 2, 10),3],[Date.UTC(2020, 2, 11),4],[Date.UTC(2020, 2, 12),5],[Date.UTC(2020, 2, 13),13],[Date.UTC(2020, 2, 14),13],[Date.UTC(2020, 2, 15),36],[Date.UTC(2020, 2, 16),50],[Date.UTC(2020, 2, 17),67],[Date.UTC(2020, 2, 18),88],[Date.UTC(2020, 2, 19),119],[Date.UTC(2020, 2, 20),169],[Date.UTC(2020, 2, 21),247],[Date.UTC(2020, 2, 22),351],[Date.UTC(2020, 2, 23),442],[Date.UTC(2020, 2, 24),564],[Date.UTC(2020, 2, 25),704],[Date.UTC(2020, 2, 26),867]]
 			}]
 		});
+
+
 		});
 	</script>
 	</body>

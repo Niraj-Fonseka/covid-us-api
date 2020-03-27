@@ -12,8 +12,9 @@ type Services struct {
 
 func RegisterServices() *Services {
 	request := requests.Request{
-		Client:  &http.Client{},
-		BaseURL: "https://covidtracking.com",
+		Client:               &http.Client{},
+		BaseURLCovidTracking: "https://covidtracking.com",
+		CountyTrackingURL:    "https://usafactsstatic.blob.core.windows.net/public/2020/coronavirus-timeline/allData.json",
 	}
 
 	covidService := &Covid{

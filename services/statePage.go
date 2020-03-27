@@ -27,15 +27,33 @@ func (c *StatePage) BuildPage() error {
 		return err
 	}
 
+	countyData, err := c.CovidService.GetCountyLevelDataRefactor()
+	if err != nil {
+		return err
+	}
+
 	for state, stateValues := range generatedData.StateData {
-		normalizedData, err := c.GenerateData(stateValues, generatedData.LastUpdated)
+		generatedImports := fmt.Sprintf(imports, strings.ToLower(state))
+
+		normalizedData, err := c.GenerateData(stateValues, generatedData.LastUpdated, countyData)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
 		bodyDataInjected := fmt.Sprintf(upperBody, state, normalizedData["lastUpdated"])
-		chartScriptDataInjected := fmt.Sprintf(chartScript, "'%y-%m-%e'", normalizedData["deathsArray"], "'%y-%m-%e'", normalizedData["positiveArray"])
-		page := fmt.Sprintf(header, imports, styles, bodyDataInjected+chartScriptDataInjected)
+
+		if normalizedData[strings.ToLower(state)+"-death"] == nil {
+			normalizedData[strings.ToLower(state)+"-death"] = "[]"
+		}
+
+		if normalizedData[strings.ToLower(state)+"-positive"] == nil {
+			normalizedData[strings.ToLower(state)+"-positive"] = "[]"
+		}
+
+		chartScriptDataInjected := fmt.Sprintf(chartScript, strings.ToLower(state),
+			normalizedData[strings.ToLower(state)+"-death"], "'%y-%m-%e'", normalizedData["deathsArray"],
+			strings.ToLower(state), normalizedData[strings.ToLower(state)+"-positive"], "'%y-%m-%e'", normalizedData["positiveArray"])
+		page := fmt.Sprintf(header, generatedImports, styles, bodyDataInjected+chartScriptDataInjected)
 		fileName := fmt.Sprintf("%s.html", state)
 		err = file.SaveFile(fileName, "states", []byte(page))
 		if err != nil {
@@ -50,7 +68,18 @@ func (c *StatePage) BuildPage() error {
 	return nil
 }
 
-func (c *StatePage) GenerateData(daily []Daily, lastUpdated string) (map[string]interface{}, error) {
+func generateStateCode(state, code string) string {
+	state = strings.ToLower(state)
+	shortenedCode := code[2:]
+
+	return fmt.Sprintf("us-%s-%s", state, shortenedCode)
+}
+
+func generateCountyName(county, state string) string {
+	return fmt.Sprintf("%s , %s", strings.TrimSpace(county), strings.TrimSpace(state))
+}
+
+func (c *StatePage) GenerateData(daily []Daily, lastUpdated string, countyData USCountyAll) (map[string]interface{}, error) {
 
 	var dates string
 	var y1 string
@@ -76,6 +105,37 @@ func (c *StatePage) GenerateData(daily []Daily, lastUpdated string) (map[string]
 	dates = "[" + strings.TrimPrefix(dates, ",") + "]"
 
 	dataStore := make(map[string]interface{})
+
+	for state, countyList := range countyData.CountyData {
+		stateLower := strings.ToLower(state)
+		var generatedDataConfirmed string
+		var generatedDataDeath string
+		for _, county := range countyList {
+			if len(county.CountyFIPS) == 2 {
+				continue
+			}
+			code := generateStateCode(stateLower, county.CountyFIPS)
+			//generatedName := generateCountyName(county.County, state)
+
+			if county.Confirmed[len(county.Confirmed)-1] > 0 {
+				generatedDataConfirmed += fmt.Sprintf("['%s', %d ],", code, county.Confirmed[len(county.Confirmed)-1])
+			}
+
+			if county.Deaths[len(county.Deaths)-1] > 0 {
+				generatedDataDeath += fmt.Sprintf("['%s', %d ],", code, county.Deaths[len(county.Deaths)-1])
+			}
+
+			// generatedDataDeath = append(generatedDataDeath, CountyRecord{Code: code, Name: generatedName, Value: county.Deaths[len(county.Deaths)-1]})
+			// generatedDataConfirmed = append(generatedDataConfirmed, CountyRecord{Code: code, Name: generatedName, Value: county.Confirmed[len(county.Confirmed)-1]})
+
+		}
+		generatedDataConfirmed = "[" + strings.TrimSuffix(generatedDataConfirmed, ",") + "]"
+		generatedDataDeath = "[" + strings.TrimSuffix(generatedDataDeath, ",") + "]"
+
+		dataStore[strings.ToLower(state)+"-death"] = generatedDataDeath
+		dataStore[strings.ToLower(state)+"-positive"] = generatedDataConfirmed
+
+	}
 
 	dataStore["deathsArray"] = y1
 	dataStore["positiveArray"] = y2
@@ -104,9 +164,12 @@ func (c *StatePage) GenerateHeader() string {
 func (c *StatePage) GenerateImports() string {
 	imports := `
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-%s-all.js"></script>
 	`
 	return imports
 }
@@ -126,6 +189,41 @@ func (c *StatePage) GenerateChart(data ...string) string {
 	});
 
 	$(function () {
+		$('#state-trending-deaths-map').highcharts('Map', {
+			title:{
+				text : 'Deaths by County'
+			},
+			chart: {
+				map: 'countries/us/us-%s-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: %s,
+				name: 'Deaths',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-deaths').highcharts( {
 			title:{
 				text : 'Deaths'
@@ -170,6 +268,43 @@ func (c *StatePage) GenerateChart(data ...string) string {
 				data: %s
 			}]
 		});
+
+
+		$('#state-trending-positive-map').highcharts('Map', {
+			title:{
+				text : 'Positive cases by County'
+			},
+			chart: {
+				map: 'countries/us/us-%s-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: %s,
+				name: 'Positive',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-positive').highcharts( {
 			title:{
 				text : 'Positive Cases'
@@ -213,6 +348,8 @@ func (c *StatePage) GenerateChart(data ...string) string {
 				data: %s
 			}]
 		});
+
+
 		});
 	</script>`
 	return chart
@@ -296,9 +433,17 @@ func (c *StatePage) GenerateBody() string {
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
+
+		<div id="note">
+			NOTE : The data in the map may be a few datapoints behind the line graph since the data is collected from different datasources.
+		</div>
 		
+		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<hr>
+		<div id="state-trending-positive-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
 	`
@@ -311,6 +456,14 @@ func (c *StatePage) GenerateStyle() string {
 	#date-title{
 		text-align: center;
 		color: #E0E0E3;
+	}
+
+	#note{
+		margin: 10px;
+		text-align: center;
+		color: #E0E0E3;
+		font-style: italic;
+
 	}
 
 	#state-title{
