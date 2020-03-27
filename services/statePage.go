@@ -41,7 +41,18 @@ func (c *StatePage) BuildPage() error {
 			continue
 		}
 		bodyDataInjected := fmt.Sprintf(upperBody, state, normalizedData["lastUpdated"])
-		chartScriptDataInjected := fmt.Sprintf(chartScript, strings.ToLower(state), normalizedData[strings.ToLower(state)+"-death"], "'%y-%m-%e'", normalizedData["deathsArray"], strings.ToLower(state), normalizedData[strings.ToLower(state)+"-positive"], "'%y-%m-%e'", normalizedData["positiveArray"])
+
+		if normalizedData[strings.ToLower(state)+"-death"] == nil {
+			normalizedData[strings.ToLower(state)+"-death"] = "[]"
+		}
+
+		if normalizedData[strings.ToLower(state)+"-positive"] == nil {
+			normalizedData[strings.ToLower(state)+"-positive"] = "[]"
+		}
+
+		chartScriptDataInjected := fmt.Sprintf(chartScript, strings.ToLower(state),
+			normalizedData[strings.ToLower(state)+"-death"], "'%y-%m-%e'", normalizedData["deathsArray"],
+			strings.ToLower(state), normalizedData[strings.ToLower(state)+"-positive"], "'%y-%m-%e'", normalizedData["positiveArray"])
 		page := fmt.Sprintf(header, generatedImports, styles, bodyDataInjected+chartScriptDataInjected)
 		fileName := fmt.Sprintf("%s.html", state)
 		err = file.SaveFile(fileName, "states", []byte(page))
