@@ -2,9 +2,12 @@
 	<head>
 	
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-ny-all.js"></script>
 	
 	</head>
 
@@ -68,7 +71,7 @@
 		</div>
 
 		<div id="date-title">
-			<h1> Last updated : 26 Mar 20 11:38 CDT</h1>
+			<h1> Last updated : 26 Mar 20 18:09 CDT</h1>
 		</div>
 
 
@@ -139,8 +142,12 @@
 			</select>
 		</div> 
 		
+		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<hr>
+		<div id="state-trending-positive-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
 	
@@ -156,6 +163,41 @@
 	});
 
 	$(function () {
+		$('#state-trending-deaths-map').highcharts('Map', {
+			title:{
+				text : 'Deaths by County'
+			},
+			chart: {
+				map: 'countries/us/us-ny-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-ny-029', 1 ],['us-ny-055', 3 ],['us-ny-059', 17 ],['us-ny-061', 280 ],['us-ny-087', 5 ],['us-ny-103', 20 ],['us-ny-119', 1 ]],
+				name: 'Deaths',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-deaths').highcharts( {
 			title:{
 				text : 'Deaths'
@@ -197,9 +239,46 @@
 		
 			series: [{
 				name: "deaths",
-				data: [[Date.UTC(2020, 2, 04),0],[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),3],[Date.UTC(2020, 2, 16),7],[Date.UTC(2020, 2, 17),7],[Date.UTC(2020, 2, 18),12],[Date.UTC(2020, 2, 19),12],[Date.UTC(2020, 2, 20),35],[Date.UTC(2020, 2, 21),44],[Date.UTC(2020, 2, 22),114],[Date.UTC(2020, 2, 23),114],[Date.UTC(2020, 2, 24),210],[Date.UTC(2020, 2, 25),285]]
+				data: [[Date.UTC(2020, 2, 04),0],[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),3],[Date.UTC(2020, 2, 16),7],[Date.UTC(2020, 2, 17),7],[Date.UTC(2020, 2, 18),12],[Date.UTC(2020, 2, 19),12],[Date.UTC(2020, 2, 20),35],[Date.UTC(2020, 2, 21),44],[Date.UTC(2020, 2, 22),114],[Date.UTC(2020, 2, 23),114],[Date.UTC(2020, 2, 24),210],[Date.UTC(2020, 2, 25),285],[Date.UTC(2020, 2, 26),385]]
 			}]
 		});
+
+
+		$('#state-trending-positive-map').highcharts('Map', {
+			title:{
+				text : 'Positive cases by County'
+			},
+			chart: {
+				map: 'countries/us/us-ny-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-ny-001', 152 ],['us-ny-003', 2 ],['us-ny-007', 11 ],['us-ny-011', 2 ],['us-ny-013', 1 ],['us-ny-015', 1 ],['us-ny-017', 3 ],['us-ny-019', 10 ],['us-ny-021', 12 ],['us-ny-023', 2 ],['us-ny-025', 5 ],['us-ny-027', 153 ],['us-ny-029', 122 ],['us-ny-031', 4 ],['us-ny-033', 1 ],['us-ny-035', 1 ],['us-ny-037', 2 ],['us-ny-039', 4 ],['us-ny-041', 2 ],['us-ny-043', 5 ],['us-ny-045', 2 ],['us-ny-051', 3 ],['us-ny-053', 7 ],['us-ny-055', 118 ],['us-ny-057', 4 ],['us-ny-059', 3285 ],['us-ny-061', 17856 ],['us-ny-063', 12 ],['us-ny-065', 9 ],['us-ny-067', 65 ],['us-ny-069', 9 ],['us-ny-071', 638 ],['us-ny-073', 2 ],['us-ny-075', 2 ],['us-ny-077', 2 ],['us-ny-079', 84 ],['us-ny-083', 31 ],['us-ny-087', 968 ],['us-ny-089', 1 ],['us-ny-091', 64 ],['us-ny-093', 55 ],['us-ny-095', 2 ],['us-ny-101', 8 ],['us-ny-103', 2260 ],['us-ny-105', 39 ],['us-ny-107', 1 ],['us-ny-109', 16 ],['us-ny-111', 65 ],['us-ny-113', 2 ],['us-ny-115', 4 ],['us-ny-117', 7 ],['us-ny-119', 4691 ],['us-ny-121', 4 ]],
+				name: 'Positive',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-positive').highcharts( {
 			title:{
 				text : 'Positive Cases'
@@ -240,9 +319,11 @@
 		
 			series: [{
 				name: "positive",
-				data: [[Date.UTC(2020, 2, 04),6],[Date.UTC(2020, 2, 05),22],[Date.UTC(2020, 2, 06),33],[Date.UTC(2020, 2, 07),76],[Date.UTC(2020, 2, 08),105],[Date.UTC(2020, 2, 09),142],[Date.UTC(2020, 2, 10),173],[Date.UTC(2020, 2, 11),216],[Date.UTC(2020, 2, 12),216],[Date.UTC(2020, 2, 13),421],[Date.UTC(2020, 2, 14),524],[Date.UTC(2020, 2, 15),729],[Date.UTC(2020, 2, 16),950],[Date.UTC(2020, 2, 17),1700],[Date.UTC(2020, 2, 18),2382],[Date.UTC(2020, 2, 19),4152],[Date.UTC(2020, 2, 20),7102],[Date.UTC(2020, 2, 21),10356],[Date.UTC(2020, 2, 22),15168],[Date.UTC(2020, 2, 23),20875],[Date.UTC(2020, 2, 24),25665],[Date.UTC(2020, 2, 25),30811]]
+				data: [[Date.UTC(2020, 2, 04),6],[Date.UTC(2020, 2, 05),22],[Date.UTC(2020, 2, 06),33],[Date.UTC(2020, 2, 07),76],[Date.UTC(2020, 2, 08),105],[Date.UTC(2020, 2, 09),142],[Date.UTC(2020, 2, 10),173],[Date.UTC(2020, 2, 11),216],[Date.UTC(2020, 2, 12),216],[Date.UTC(2020, 2, 13),421],[Date.UTC(2020, 2, 14),524],[Date.UTC(2020, 2, 15),729],[Date.UTC(2020, 2, 16),950],[Date.UTC(2020, 2, 17),1700],[Date.UTC(2020, 2, 18),2382],[Date.UTC(2020, 2, 19),4152],[Date.UTC(2020, 2, 20),7102],[Date.UTC(2020, 2, 21),10356],[Date.UTC(2020, 2, 22),15168],[Date.UTC(2020, 2, 23),20875],[Date.UTC(2020, 2, 24),25665],[Date.UTC(2020, 2, 25),30811],[Date.UTC(2020, 2, 26),37258]]
 			}]
 		});
+
+
 		});
 	</script>
 	</body>

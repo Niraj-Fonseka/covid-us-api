@@ -2,9 +2,12 @@
 	<head>
 	
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-va-all.js"></script>
 	
 	</head>
 
@@ -68,7 +71,7 @@
 		</div>
 
 		<div id="date-title">
-			<h1> Last updated : 26 Mar 20 11:38 CDT</h1>
+			<h1> Last updated : 26 Mar 20 18:09 CDT</h1>
 		</div>
 
 
@@ -139,8 +142,12 @@
 			</select>
 		</div> 
 		
+		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-deaths" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		
+		<hr>
+		<div id="state-trending-positive-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+
 		<div id="state-trending-positive" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	
 	
@@ -156,6 +163,41 @@
 	});
 
 	$(function () {
+		$('#state-trending-deaths-map').highcharts('Map', {
+			title:{
+				text : 'Deaths by County'
+			},
+			chart: {
+				map: 'countries/us/us-va-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-va-059', 1 ],['us-va-087', 2 ],['us-va-095', 2 ],['us-va-199', 1 ],['us-va-700', 1 ],['us-va-810', 1 ],['us-va-830', 1 ]],
+				name: 'Deaths',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-deaths').highcharts( {
 			title:{
 				text : 'Deaths'
@@ -197,9 +239,46 @@
 		
 			series: [{
 				name: "deaths",
-				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),1],[Date.UTC(2020, 2, 16),1],[Date.UTC(2020, 2, 17),1],[Date.UTC(2020, 2, 18),1],[Date.UTC(2020, 2, 19),2],[Date.UTC(2020, 2, 20),2],[Date.UTC(2020, 2, 21),2],[Date.UTC(2020, 2, 22),3],[Date.UTC(2020, 2, 23),6],[Date.UTC(2020, 2, 24),7],[Date.UTC(2020, 2, 25),9]]
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),0],[Date.UTC(2020, 2, 09),0],[Date.UTC(2020, 2, 10),0],[Date.UTC(2020, 2, 11),0],[Date.UTC(2020, 2, 12),0],[Date.UTC(2020, 2, 13),0],[Date.UTC(2020, 2, 14),0],[Date.UTC(2020, 2, 15),1],[Date.UTC(2020, 2, 16),1],[Date.UTC(2020, 2, 17),1],[Date.UTC(2020, 2, 18),1],[Date.UTC(2020, 2, 19),2],[Date.UTC(2020, 2, 20),2],[Date.UTC(2020, 2, 21),2],[Date.UTC(2020, 2, 22),3],[Date.UTC(2020, 2, 23),6],[Date.UTC(2020, 2, 24),7],[Date.UTC(2020, 2, 25),9],[Date.UTC(2020, 2, 26),13]]
 			}]
 		});
+
+
+		$('#state-trending-positive-map').highcharts('Map', {
+			title:{
+				text : 'Positive cases by County'
+			},
+			chart: {
+				map: 'countries/us/us-va-all',
+				backgroundColor: 'transparent'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				data: [['us-va-001', 1 ],['us-va-003', 6 ],['us-va-009', 1 ],['us-va-013', 46 ],['us-va-019', 2 ],['us-va-023', 1 ],['us-va-036', 1 ],['us-va-041', 11 ],['us-va-047', 2 ],['us-va-059', 77 ],['us-va-065', 1 ],['us-va-067', 1 ],['us-va-069', 2 ],['us-va-073', 2 ],['us-va-075', 3 ],['us-va-083', 1 ],['us-va-085', 2 ],['us-va-087', 20 ],['us-va-093', 2 ],['us-va-095', 41 ],['us-va-105', 2 ],['us-va-107', 20 ],['us-va-109', 3 ],['us-va-113', 1 ],['us-va-115', 1 ],['us-va-117', 3 ],['us-va-125', 1 ],['us-va-135', 1 ],['us-va-137', 1 ],['us-va-147', 2 ],['us-va-153', 32 ],['us-va-161', 1 ],['us-va-163', 1 ],['us-va-165', 2 ],['us-va-171', 3 ],['us-va-177', 3 ],['us-va-179', 6 ],['us-va-199', 8 ],['us-va-510', 9 ],['us-va-540', 6 ],['us-va-550', 3 ],['us-va-590', 2 ],['us-va-630', 1 ],['us-va-660', 2 ],['us-va-683', 2 ],['us-va-700', 4 ],['us-va-710', 5 ],['us-va-740', 3 ],['us-va-760', 13 ],['us-va-800', 1 ],['us-va-810', 23 ],['us-va-830', 5 ]],
+				name: 'Positive',
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+		});
+
 		$('#state-trending-positive').highcharts( {
 			title:{
 				text : 'Positive Cases'
@@ -240,9 +319,11 @@
 		
 			series: [{
 				name: "positive",
-				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),2],[Date.UTC(2020, 2, 09),3],[Date.UTC(2020, 2, 10),8],[Date.UTC(2020, 2, 11),9],[Date.UTC(2020, 2, 12),17],[Date.UTC(2020, 2, 13),30],[Date.UTC(2020, 2, 14),30],[Date.UTC(2020, 2, 15),45],[Date.UTC(2020, 2, 16),51],[Date.UTC(2020, 2, 17),67],[Date.UTC(2020, 2, 18),77],[Date.UTC(2020, 2, 19),94],[Date.UTC(2020, 2, 20),114],[Date.UTC(2020, 2, 21),152],[Date.UTC(2020, 2, 22),219],[Date.UTC(2020, 2, 23),254],[Date.UTC(2020, 2, 24),290],[Date.UTC(2020, 2, 25),391]]
+				data: [[Date.UTC(2020, 2, 05),0],[Date.UTC(2020, 2, 06),0],[Date.UTC(2020, 2, 07),0],[Date.UTC(2020, 2, 08),2],[Date.UTC(2020, 2, 09),3],[Date.UTC(2020, 2, 10),8],[Date.UTC(2020, 2, 11),9],[Date.UTC(2020, 2, 12),17],[Date.UTC(2020, 2, 13),30],[Date.UTC(2020, 2, 14),30],[Date.UTC(2020, 2, 15),45],[Date.UTC(2020, 2, 16),51],[Date.UTC(2020, 2, 17),67],[Date.UTC(2020, 2, 18),77],[Date.UTC(2020, 2, 19),94],[Date.UTC(2020, 2, 20),114],[Date.UTC(2020, 2, 21),152],[Date.UTC(2020, 2, 22),219],[Date.UTC(2020, 2, 23),254],[Date.UTC(2020, 2, 24),290],[Date.UTC(2020, 2, 25),391],[Date.UTC(2020, 2, 26),460]]
 			}]
 		});
+
+
 		});
 	</script>
 	</body>
