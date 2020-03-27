@@ -433,6 +433,10 @@ func (c *StatePage) GenerateBody() string {
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
+
+		<div id="note">
+			NOTE : The data in the map may be a few datapoints behind the line graph since the data is collected from different datasources.
+		</div>
 		
 		<div id="state-trending-deaths-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
 
@@ -452,6 +456,14 @@ func (c *StatePage) GenerateStyle() string {
 	#date-title{
 		text-align: center;
 		color: #E0E0E3;
+	}
+
+	#note{
+		margin: 10px;
+		text-align: center;
+		color: #E0E0E3;
+		font-style: italic;
+
 	}
 
 	#state-title{
