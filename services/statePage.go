@@ -33,6 +33,11 @@ func (c *StatePage) BuildPage() error {
 	}
 
 	for state, stateValues := range generatedData.StateData {
+
+		//skip the US territories because of lack of data
+		// if strings.ToLower(state) == "pr" || strings.ToLower(state) == "vi" || strings.ToLower(state) == "gu" || strings.ToLower(state) == "mp" || strings.ToLower(state) == "as" {
+		// 	continue
+		// }
 		generatedImports := fmt.Sprintf(imports, strings.ToLower(state))
 
 		normalizedData, err := c.GenerateData(stateValues, generatedData.LastUpdated, countyData)
@@ -426,11 +431,6 @@ func (c *StatePage) GenerateBody() string {
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WI">WI</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WV">WV</option>
 				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/WY">WY</option>
-				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/PR">PR</option>
-				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/VI">VI</option>
-				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/GU">GU</option>
-				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/MP">MP</option>
-				<option value="https://covid-19-us-dataset.s3.amazonaws.com/states/AS">AS</option>
 			</select>
 		</div> 
 
